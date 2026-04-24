@@ -10,20 +10,26 @@ use Semitexa\Theme\Model\SkinEntry;
 /**
  * Filesystem-backed skin discovery.
  *
- * v1 source: `packages/semitexa-skins-base/src/Application/Static/skins/`
- * (canonical pool, served at `/assets/skins-base/skins/<slug>/tokens.css`
- * via ssr's asset pipeline).
+ * Two sources, in priority order (later overrides earlier when slugs collide):
  *
- * Future sources (not yet implemented):
- *  - `var/skins/<slug>/tokens.css` — per-project overrides, needs a serve
- *    path to be wired up (e.g. symlinked into skins-base/Static or
- *    registered as its own asset module).
+ *   1. `vendor/semitexa/skins-base/src/Application/Static/skins/` — framework
+ *      default. Ships the single `default` skin used as the baseline when no
+ *      project skin matches.
+ *   2. `src/skins/` — project-local. Generated skins land here via
+ *      `skin:generate --write`. Slug collisions here take precedence.
  *
- * A skin is discoverable iff `<source>/<slug>/tokens.css` exists. Slug
- * collisions resolve to the latest source in `sources()`.
+ * Both sources are served at the unified URL prefix `/assets/skins/<slug>/tokens.css`
+ * by `BootProjectSkinsAssetAliasListener`, which registers a SSR asset alias
+ * pointing to both dirs (project first → priority override).
+ *
+ * A skin is discoverable iff `<source>/<slug>/tokens.css` exists.
  */
 final class SkinDiscovery implements SkinDiscoveryInterface
 {
+    public const ASSET_URL_PREFIX = '/assets/skins';
+    public const PROJECT_SKINS_DIR = '/src/skins';
+    public const FRAMEWORK_SKINS_DIR = '/vendor/semitexa/skins-base/src/Application/Static/skins';
+
     public function __construct(
         private readonly string $projectRoot,
     ) {
@@ -40,9 +46,10 @@ final class SkinDiscovery implements SkinDiscoveryInterface
                 if (! is_file($tokens)) {
                     continue;
                 }
+                // Later sources win → project overrides framework.
                 $bySlug[$slug] = new SkinEntry(
                     slug: $slug,
-                    tokensUrl: rtrim($source['urlBase'], '/') . '/' . $slug . '/tokens.css',
+                    tokensUrl: self::ASSET_URL_PREFIX . '/' . $slug . '/tokens.css',
                     tokensFilePath: $tokens,
                     source: $source['name'],
                 );
@@ -69,15 +76,35 @@ final class SkinDiscovery implements SkinDiscoveryInterface
     }
 
     /**
-     * @return list<array{name: string, root: string, urlBase: string}>
+     * Project root + skins-relative dirs that SSR should also serve under
+     * `/assets/skins/`. The listener uses this list so URL + filesystem stay
+     * authoritative in one place.
+     *
+     * @return list<string>
+     */
+    public function rootsForAssetAlias(): array
+    {
+        // Order matters: framework first (registered, lowest priority),
+        // project second (registered last → prepended → highest priority).
+        return array_values(array_filter([
+            $this->projectRoot . self::FRAMEWORK_SKINS_DIR,
+            $this->projectRoot . self::PROJECT_SKINS_DIR,
+        ], static fn (string $path) => is_dir($path)));
+    }
+
+    /**
+     * @return list<array{name: string, root: string}>
      */
     private function sources(): array
     {
         return [
             [
-                'name' => 'skins-base',
-                'root' => $this->projectRoot . '/packages/semitexa-skins-base/src/Application/Static/skins',
-                'urlBase' => '/assets/skins-base/skins',
+                'name' => 'framework',
+                'root' => $this->projectRoot . self::FRAMEWORK_SKINS_DIR,
+            ],
+            [
+                'name' => 'project',
+                'root' => $this->projectRoot . self::PROJECT_SKINS_DIR,
             ],
         ];
     }
