@@ -1,0 +1,73 @@
+{
+    "name": "default",
+    "schema_version": "2.0",
+    "source": "seed",
+    "algorithm": "balanced",
+    "mode": "light",
+    "seed": "#808080",
+    "knobs": {
+        "radius_scale": "default",
+        "shadow_intensity": "default",
+        "motion_speed": "default"
+    },
+    "generated_at": "2026-04-24T10:59:13+00:00",
+    "updated_at": "2026-04-24T10:59:13+00:00",
+    "history": [
+        {
+            "at": "2026-04-24T10:59:13+00:00",
+            "kind": "generate",
+            "algorithm": "balanced",
+            "mode": "light",
+            "seed": "#808080",
+            "knobs": {
+                "radius_scale": "default",
+                "shadow_intensity": "default",
+                "motion_speed": "default"
+            },
+            "source": "seed"
+        }
+    ],
+    "tokens": {
+        "--ui-surface-page": "#fbfaf7",
+        "--ui-surface-panel": "#f5f3ed",
+        "--ui-surface-raised": "#ffffff",
+        "--ui-surface-sunken": "#eeebe4",
+        "--ui-border-subtle": "#e2ded3",
+        "--ui-border-strong": "#bdb7a6",
+        "--ui-text-primary": "#1d1a13",
+        "--ui-text-muted": "#65635d",
+        "--ui-accent-brand": "#6e6e6e",
+        "--ui-accent-brand-contrast": "#ffffff",
+        "--ui-text-on-accent": "#ffffff",
+        "--ui-state-success": "#448247",
+        "--ui-state-warning": "#d19853",
+        "--ui-state-danger": "#b14e49",
+        "--ui-state-info": "#297cae",
+        "--ui-focus-ring": "#6e6e6e",
+        "--ui-chart-1": "#a58100",
+        "--ui-chart-2": "#548832",
+        "--ui-chart-3": "#009f89",
+        "--ui-chart-4": "#0086b0",
+        "--ui-chart-5": "#6880d4",
+        "--ui-chart-6": "#945dac",
+        "--ui-chart-7": "#c46183",
+        "--ui-chart-8": "#b45a2e",
+        "--ui-radius-none": "0",
+        "--ui-radius-sm": "0.25rem",
+        "--ui-radius-md": "0.5rem",
+        "--ui-radius-lg": "0.75rem",
+        "--ui-radius-pill": "9999px",
+        "--ui-shadow-xs": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        "--ui-shadow-sm": "0 1px 3px 0 rgba(0, 0, 0, 0.06)",
+        "--ui-shadow-md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "--ui-shadow-lg": "0 10px 15px -3px rgba(0, 0, 0, 0.14)",
+        "--ui-shadow-color": "rgba(0, 0, 0, 0.1)",
+        "--ui-motion-duration-fast": "120ms",
+        "--ui-motion-duration-normal": "240ms",
+        "--ui-motion-duration-slow": "480ms",
+        "--ui-motion-easing-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "--ui-motion-easing-emphasized": "cubic-bezier(0.3, 0, 0, 1)",
+        "--ui-surface-blur": "none",
+        "--ui-surface-saturation": "100%"
+    }
+}

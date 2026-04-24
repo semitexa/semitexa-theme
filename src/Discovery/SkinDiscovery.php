@@ -12,11 +12,12 @@ use Semitexa\Theme\Model\SkinEntry;
  *
  * Two sources, in priority order (later overrides earlier when slugs collide):
  *
- *   1. `vendor/semitexa/skins-base/src/Application/Static/skins/` — framework
+ *   1. `vendor/semitexa/theme/src/Application/Static/skins/` — framework
  *      default. Ships the single `default` skin used as the baseline when no
- *      project skin matches.
- *   2. `src/skins/` — project-local. Generated skins land here via
- *      `skin:generate --write`. Slug collisions here take precedence.
+ *      project skin matches. (Was previously in semitexa/skins-base before
+ *      the ep-ssr-theme-skin-reconciliation fold.)
+ *   2. `src/skins/` — project-local. Drop a `<slug>/tokens.css` here and it
+ *      is auto-discovered. Slug collisions with framework-default win (project wins).
  *
  * Both sources are served at the unified URL prefix `/assets/skins/<slug>/tokens.css`
  * by `BootProjectSkinsAssetAliasListener`, which registers a SSR asset alias
@@ -28,7 +29,7 @@ final class SkinDiscovery implements SkinDiscoveryInterface
 {
     public const ASSET_URL_PREFIX = '/assets/skins';
     public const PROJECT_SKINS_DIR = '/src/skins';
-    public const FRAMEWORK_SKINS_DIR = '/vendor/semitexa/skins-base/src/Application/Static/skins';
+    public const FRAMEWORK_SKINS_DIR = '/vendor/semitexa/theme/src/Application/Static/skins';
 
     public function __construct(
         private readonly string $projectRoot,

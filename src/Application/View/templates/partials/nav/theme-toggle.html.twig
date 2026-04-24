@@ -1,0 +1,25 @@
+{#
+ # Light/dark theme toggle control used in the marketing demo-nav.
+ #
+ # Params:
+ #   theme_prefix (string) — prefix for the data-* attribute pair that the
+ #                           site-specific theme-switcher script listens to.
+ #                           Examples: 'demo', 'os', 'platform'. Produces
+ #                           `data-{prefix}-theme-text` and
+ #                           `data-{prefix}-theme-toggle` attributes.
+ #}
+<div class="demo-nav__theme-control">
+    <span class="demo-nav__theme-text" aria-hidden="true" data-{{ theme_prefix }}-theme-text>Dark mode</span>
+    <button
+        class="demo-nav__theme-toggle"
+        type="button"
+        aria-pressed="false"
+        aria-label="Switch to dark mode"
+        title="Toggle color theme"
+        data-{{ theme_prefix }}-theme-toggle
+    >
+        <span class="demo-nav__theme-toggle-track" aria-hidden="true">
+            <span class="demo-nav__theme-toggle-thumb"></span>
+        </span>
+    </button>
+</div>

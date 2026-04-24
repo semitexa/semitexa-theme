@@ -1,0 +1,22 @@
+{#
+ # Canonical layout for Semitexa marketing sites (semitexa-site, os-site,
+ # platform-site). Child templates extend this layout and override:
+ #
+ #   head        — usually an {% embed %} of
+ #                 @project-layouts-theme-base/partials/head/marketing-head.html.twig
+ #                 that provides the site's fonts block.
+ #   body_attrs  — raw attribute string(s) emitted inside the <body> opening
+ #                 tag (e.g. ` class="os-site" data-theme-label-dark="…"`).
+ #                 Leading space matters if you want one.
+ #   body        — the full marketing content including the site's header,
+ #                 hero, product sections, and footer.
+ #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}{% endblock %}
+</head>
+<body{% block body_attrs %}{% endblock %}>
+    {% block body %}{% endblock %}
+</body>
+</html>

@@ -14,8 +14,9 @@ use Semitexa\Theme\Discovery\SkinDiscovery;
 
 /**
  * Registers the `skins` asset alias at worker boot so both framework default
- * (`vendor/semitexa/skins-base/…/skins/`) and project-local (`src/skins/`)
- * skin dirs serve under the unified URL prefix `/assets/skins/<slug>/tokens.css`.
+ * (`vendor/semitexa/theme/src/Application/Static/skins/`) and project-local
+ * (`src/skins/`) skin dirs serve under the unified URL prefix
+ * `/assets/skins/<slug>/tokens.css`.
  *
  * Runs in `WorkerStartFinalize` phase — after `BootAssetRegistryListener`
  * (`WorkerStartAfterContainer`) has called `ModuleAssetRegistry::initialize()`.

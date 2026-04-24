@@ -1,0 +1,30 @@
+{#
+ # Composes the inner <head> content for a Semitexa marketing site. The
+ # caller is responsible for its own <head>…</head> wrapper.
+ #
+ # Params:
+ #   site_title  (string) — fallback when page_title() is empty
+ #
+ # Blocks (override via {% embed %}):
+ #   title        — defaults to `page_title() or site_title`
+ #   fonts        — Google Fonts <link> tag(s). No default — each site picks
+ #                  its own family (Syne, Syne+IBM Plex Sans, etc.)
+ #   meta_extra   — defaults to the standard marketing 5-tuple (description,
+ #                  keywords, og:title, og:description, og:type). Override
+ #                  with empty block to suppress, or with custom tags.
+ #}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ page_title()|default(site_title|default('Semitexa')) }}{% endblock %}</title>
+{% include '@project-layouts-theme-base/partials/head/google-fonts-preconnect.html.twig' %}
+{% block fonts %}{% endblock %}
+{% block meta_extra %}
+    {{ meta('description') }}
+    {{ meta('keywords') }}
+    {{ meta('og:title') }}
+    {{ meta('og:description') }}
+    {{ meta('og:type') }}
+{% endblock %}
+{% include '@project-layouts-theme-base/partials/head/theme-switcher.html.twig' %}
+<link rel="stylesheet" href="{{ theme_skin_css() }}">
+{{ asset_head() }}

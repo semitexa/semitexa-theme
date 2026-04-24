@@ -1,8 +1,16 @@
 {
     "name": "semitexa/theme",
-    "description": "Semitexa theme/skin resolver layer — runtime selection of theme + skin by tenant/domain/locale with fallback chain.",
+    "description": "Semitexa theme/skin resolver layer + base theme (layouts, partials, default skin, SkinAlgorithm contract). Framework + theme-base rolled into one package.",
     "type": "semitexa-module",
     "license": "MIT",
+    "keywords": [
+        "semitexa",
+        "theme",
+        "skin",
+        "theming",
+        "tenancy",
+        "locale"
+    ],
     "require": {
         "php": "^8.4",
         "semitexa/core": "*",
@@ -25,8 +33,9 @@
     },
     "extra": {
         "semitexa-module": {
-            "name": "theme",
-            "description": "Theme/skin resolver layer for multi-tenant Semitexa applications"
+            "name": "theme-base",
+            "description": "Theme resolver + base theme: layouts, partials, default skin, SkinAlgorithm contract",
+            "template_alias": "theme-base"
         }
     }
 }

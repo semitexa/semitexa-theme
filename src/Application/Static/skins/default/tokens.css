@@ -1,0 +1,46 @@
+/* Framework-default skin tokens — single-source light + dark via light-dark().
+ *
+ * Layout:
+ *   color-scheme: light dark  → browser picks by prefers-color-scheme.
+ *   data-skin-mode on <html>  → explicit override pins the scheme.
+ *   light-dark(a, b)          → `a` under light, `b` under dark.
+ *
+ * Project consumers override this by placing src/skins/default/tokens.css
+ * (same slug wins). SkinGen writes to src/skins/<custom-slug>/tokens.css.
+ */
+:root {
+    color-scheme: light dark;
+
+    --ui-surface-page:          light-dark(#fbfaf7, #16140f);
+    --ui-surface-panel:         light-dark(#f5f3ed, #1d1b15);
+    --ui-surface-raised:        light-dark(#ffffff, #26231c);
+    --ui-surface-sunken:        light-dark(#eeebe4, #0e0d0a);
+    --ui-border-subtle:         light-dark(#e2ded3, #2f2c24);
+    --ui-border-strong:         light-dark(#bdb7a6, #4d4940);
+    --ui-text-primary:          light-dark(#1d1a13, #f0ecdf);
+    --ui-text-muted:            light-dark(#65635d, #90897a);
+    --ui-accent-brand:          light-dark(#6e6e6e, #8a8a8a);
+    --ui-accent-brand-contrast: #ffffff;
+    --ui-text-on-accent:        #ffffff;
+    --ui-state-success:         light-dark(#448247, #4ea653);
+    --ui-state-warning:         light-dark(#d19853, #e6ac6b);
+    --ui-state-danger:          light-dark(#b14e49, #d85f57);
+    --ui-state-info:            light-dark(#297cae, #3ba6df);
+    --ui-focus-ring:            light-dark(#6e6e6e, #8a8a8a);
+    --ui-chart-1: light-dark(#a58100, #d4a732);
+    --ui-chart-2: light-dark(#548832, #7ab553);
+    --ui-chart-3: light-dark(#009f89, #3fc8b2);
+    --ui-chart-4: light-dark(#0086b0, #42b0d3);
+    --ui-chart-5: light-dark(#6880d4, #9baaeb);
+    --ui-chart-6: light-dark(#945dac, #bb8acf);
+    --ui-chart-7: light-dark(#c46183, #df93ae);
+    --ui-chart-8: light-dark(#b45a2e, #d68b5e);
+
+    --ui-radius-none: 0;
+    --ui-radius-sm: 0.25rem;
+    --ui-radius-md: 0.5rem;
+    --ui-radius-lg: 0.75rem;
+}
+
+:root[data-skin-mode="light"] { color-scheme: light; }
+:root[data-skin-mode="dark"]  { color-scheme: dark; }
