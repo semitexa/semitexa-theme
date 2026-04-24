@@ -1,0 +1,32 @@
+{
+    "name": "semitexa/theme",
+    "description": "Semitexa theme/skin resolver layer — runtime selection of theme + skin by tenant/domain/locale with fallback chain.",
+    "type": "semitexa-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "semitexa/core": "*",
+        "semitexa/ssr": "*",
+        "semitexa/locale": "*",
+        "semitexa/tenancy": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Semitexa\\Theme\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Semitexa\\Theme\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "extra": {
+        "semitexa-module": {
+            "name": "theme",
+            "description": "Theme/skin resolver layer for multi-tenant Semitexa applications"
+        }
+    }
+}
