@@ -1,0 +1,29 @@
+{#
+ # Pre-paint theme-switcher script. Applies a light/dark skin mode to <html>
+ # BEFORE CSS renders, avoiding FOUC.
+ #
+ # Reads, in order:
+ #   1. localStorage['semitexa_skin_mode']  (user's explicit choice — persisted by site toggle)
+ #   2. prefers-color-scheme media query    (OS default when no explicit choice)
+ #   3. 'light'                              (final fallback)
+ #
+ # Emits <html data-skin-mode="light|dark"> — consumed by every skin's
+ # tokens.css (color-scheme pinning + light-dark() resolution).
+ #
+ # No params. Site toggle buttons must read/write the same unified
+ # attribute + localStorage key.
+ #}
+<script>
+    (function () {
+        var root = document.documentElement;
+        try {
+            var mode = window.localStorage.getItem('semitexa_skin_mode');
+            if (mode !== 'light' && mode !== 'dark') {
+                mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            root.setAttribute('data-skin-mode', mode);
+        } catch (error) {
+            root.setAttribute('data-skin-mode', 'light');
+        }
+    })();
+</script>

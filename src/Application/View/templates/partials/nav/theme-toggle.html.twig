@@ -1,0 +1,37 @@
+{#
+ # Light/dark skin-mode toggle control used in the marketing demo-nav.
+ # Emits the unified skin-mode attributes consumed by every site's
+ # `Static/js/site.js`. No per-site prefix.
+ #}
+<div class="demo-nav__theme-control">
+    <span class="demo-nav__theme-text" aria-hidden="true" data-skin-text>Dark mode</span>
+    <button
+        class="demo-nav__theme-toggle"
+        type="button"
+        aria-pressed="false"
+        aria-label="Switch to dark mode"
+        title="Toggle color theme"
+        data-skin-toggle
+    >
+        <span class="demo-nav__theme-toggle-track" aria-hidden="true">
+            <span class="demo-nav__theme-toggle-thumb"></span>
+        </span>
+    </button>
+</div>
+<script>
+    (function () {
+        var mode = document.documentElement.getAttribute('data-skin-mode') === 'dark' ? 'dark' : 'light';
+        var nextActionLabel = mode === 'dark' ? 'Light mode' : 'Dark mode';
+        var toggle = document.currentScript.previousElementSibling.querySelector('[data-skin-toggle]');
+        var label = document.currentScript.previousElementSibling.querySelector('[data-skin-text]');
+
+        if (toggle !== null) {
+            toggle.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
+            toggle.setAttribute('aria-label', nextActionLabel);
+            toggle.setAttribute('title', nextActionLabel);
+        }
+        if (label !== null) {
+            label.textContent = nextActionLabel;
+        }
+    })();
+</script>

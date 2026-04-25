@@ -1,0 +1,23 @@
+{#
+ # Full demo-nav structure: brand → spacer → actions (theme-toggle + socials).
+ # The outer <header class="demo-header X-demo-header"> wrapper stays with the
+ # site because per-site CSS modifiers target it directly.
+ #
+ # Params:
+ #   nav_label (string) — aria-label on the <nav> (e.g. 'Site navigation')
+ #
+ # Block (optional override — only reachable via `{% embed %}`):
+ #   actions_extras — site-specific links injected BEFORE the theme-toggle
+ #                    (e.g. sign-in on semitexa-site). Empty by default.
+ #}
+<nav class="demo-nav" aria-label="{{ nav_label|default('Site navigation') }}">
+    {% include '@project-layouts-theme-base/partials/nav/brand.html.twig' %}
+
+    <div class="demo-nav__spacer" aria-hidden="true"></div>
+
+    <div class="demo-nav__actions">
+        {% block actions_extras %}{% endblock %}
+        {% include '@project-layouts-theme-base/partials/nav/theme-toggle.html.twig' %}
+        {% include '@project-layouts-theme-base/partials/nav/socials.html.twig' %}
+    </div>
+</nav>

@@ -1,0 +1,9 @@
+{
+    "id": "theme-base",
+    "active_when": {
+        "always": true
+    },
+    "skin": {
+        "default": "default"
+    }
+}

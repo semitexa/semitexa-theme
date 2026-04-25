@@ -1,0 +1,62 @@
+/* Framework-default skin tokens — single-source light + dark via light-dark().
+ *
+ * Layout:
+ *   color-scheme: light dark  → browser picks by prefers-color-scheme.
+ *   data-skin-mode on <html>  → explicit override pins the scheme.
+ *   light-dark(a, b)          → `a` under light, `b` under dark.
+ *
+ * Project consumers override this by placing src/skins/default/tokens.css
+ * (same slug wins). SkinGen writes to src/skins/<custom-slug>/tokens.css.
+ */
+:root {
+    color-scheme: light dark;
+
+    --ui-surface-page:            light-dark(#fbfaf7, #0a0906);
+    --ui-surface-panel:           light-dark(#f5f3ed, #13110d);
+    --ui-surface-raised:          light-dark(#ffffff, #1d1a14);
+    --ui-surface-sunken:          light-dark(#eeebe4, #040302);
+    --ui-border-subtle:           light-dark(#e2ded3, #2c2921);
+    --ui-border-strong:           light-dark(#bdb7a6, #514d41);
+    --ui-text-primary:            light-dark(#1d1a13, #f1eee7);
+    --ui-text-muted:              light-dark(#65635d, #928f87);
+    --ui-accent-brand:            light-dark(#6e6e6e, #808080);
+    --ui-accent-brand-contrast:   light-dark(#ffffff, #111111);
+    --ui-text-on-accent:          light-dark(#ffffff, #111111);
+    --ui-state-success:           light-dark(#448247, #5c9b5e);
+    --ui-state-warning:           light-dark(#d19853, #dea45f);
+    --ui-state-danger:            light-dark(#b14e49, #cc6660);
+    --ui-state-info:              light-dark(#297cae, #4494c8);
+    --ui-focus-ring:              light-dark(#6e6e6e, #808080);
+    --ui-chart-1:                 light-dark(#a58100, #b89420);
+    --ui-chart-2:                 light-dark(#548832, #669a45);
+    --ui-chart-3:                 light-dark(#009f89, #00b29b);
+    --ui-chart-4:                 light-dark(#0086b0, #0098c4);
+    --ui-chart-5:                 light-dark(#6880d4, #7993e8);
+    --ui-chart-6:                 light-dark(#945dac, #a66fbf);
+    --ui-chart-7:                 light-dark(#c46183, #d87495);
+    --ui-chart-8:                 light-dark(#b45a2e, #c86d41);
+
+    --ui-radius-none:             0;
+    --ui-radius-sm:               0.25rem;
+    --ui-radius-md:               0.5rem;
+    --ui-radius-lg:               0.75rem;
+    --ui-radius-pill:             9999px;
+
+    --ui-shadow-xs:               light-dark(0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.15));
+    --ui-shadow-sm:               light-dark(0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 3px 0 rgba(0, 0, 0, 0.18));
+    --ui-shadow-md:               light-dark(0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.3));
+    --ui-shadow-lg:               light-dark(0 10px 15px -3px rgba(0, 0, 0, 0.14), 0 10px 15px -3px rgba(0, 0, 0, 0.42));
+    --ui-shadow-color:            light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+
+    --ui-motion-duration-fast:    120ms;
+    --ui-motion-duration-normal:  240ms;
+    --ui-motion-duration-slow:    480ms;
+    --ui-motion-easing-standard:  cubic-bezier(0.4, 0, 0.2, 1);
+    --ui-motion-easing-emphasized:cubic-bezier(0.3, 0, 0, 1);
+
+    --ui-surface-blur:            none;
+    --ui-surface-saturation:      100%;
+}
+
+:root[data-skin-mode="light"] { color-scheme: light; }
+:root[data-skin-mode="dark"]  { color-scheme: dark; }
