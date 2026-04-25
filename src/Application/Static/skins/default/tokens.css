@@ -40,6 +40,23 @@
     --ui-radius-sm: 0.25rem;
     --ui-radius-md: 0.5rem;
     --ui-radius-lg: 0.75rem;
+    --ui-radius-pill: 9999px;
+
+    --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
+    --ui-shadow-md: 0 4px 12px rgb(0 0 0 / 0.12);
+    --ui-shadow-lg: 0 10px 24px rgb(0 0 0 / 0.16);
+
+    --ui-motion-duration-fast: 120ms;
+    --ui-motion-duration-normal: 200ms;
+    --ui-motion-duration-slow: 320ms;
+    --ui-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    --ui-surface-blur-sm: 4px;
+    --ui-surface-blur-md: 8px;
+    --ui-surface-blur-lg: 16px;
+    --ui-surface-saturation-sm: 1.05;
+    --ui-surface-saturation-md: 1.1;
+    --ui-surface-saturation-lg: 1.15;
 }
 
 :root[data-skin-mode="light"] { color-scheme: light; }

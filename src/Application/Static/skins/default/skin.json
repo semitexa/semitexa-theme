@@ -4,6 +4,9 @@
     "source": "seed",
     "algorithm": "balanced",
     "mode": "light",
+    "manifest_scope": "generated-light-token-snapshot",
+    "runtime_css_source_of_truth": false,
+    "runtime_css_notes": "tokens.css provides dual-mode runtime values via light-dark(); this manifest records the light-mode generated snapshot only.",
     "seed": "#808080",
     "knobs": {
         "radius_scale": "default",

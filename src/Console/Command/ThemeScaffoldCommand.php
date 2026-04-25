@@ -50,9 +50,14 @@ final class ThemeScaffoldCommand extends Command
         $slug = $input->getOption('slug');
         if (! is_string($slug) || $slug === '') {
             $slug = $this->slugify(basename($projectRoot));
+        } else {
+            $slug = $this->slugify($slug);
         }
         if ($slug === '' || $slug === 'theme-base') {
             return $this->fail($output, $asJson, "Invalid slug '{$slug}' — must be non-empty and not 'theme-base'.");
+        }
+        if (! preg_match('/^[a-z0-9-]+$/', $slug)) {
+            return $this->fail($output, $asJson, "Invalid slug '{$slug}' — expected lowercase letters, numbers, and hyphens only.");
         }
 
         $domain = $input->getOption('domain');
@@ -84,7 +89,11 @@ final class ThemeScaffoldCommand extends Command
             'active_when' => ['domain' => $domain],
             'skin' => ['default' => 'default'],
         ];
-        $json = (string) json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        try {
+            $json = json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return $this->fail($output, $asJson, 'Failed to encode manifest JSON: ' . $e->getMessage());
+        }
         if (file_put_contents($manifestPath, $json . "\n") === false) {
             return $this->fail($output, $asJson, "Failed to write manifest: {$manifestPath}");
         }
