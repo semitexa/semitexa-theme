@@ -14,8 +14,12 @@ use Semitexa\Theme\Contract\ThemeManifestRepositoryInterface;
  * Runs on every template / asset lookup. If the per-request assignment
  * is populated (by `ApplyThemeOnAuthCheckListener` during AuthCheck
  * phase), walks the manifest `extends` chain and returns ids leaf-first.
- * Otherwise returns an empty array, letting SSR fall back to env THEME
- * (legacy single-theme behavior).
+ * Otherwise returns an empty array — a safety fallback that lets SSR
+ * fall through to the env-`THEME` default when no per-request resolver
+ * has run (e.g., bootstrap, CLI rendering, or projects that haven't
+ * enabled the theme manifest pipeline). Replacing this fallback with a
+ * hard-fail or explicit default is tracked separately under
+ * `tk-resolver-fallback-audit-followup`.
  */
 final class ThemeContextProvider implements ThemeProviderInterface
 {

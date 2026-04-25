@@ -4,8 +4,7 @@
  # site because per-site CSS modifiers target it directly.
  #
  # Params:
- #   nav_label    (string) — aria-label on the <nav> (e.g. 'Site navigation')
- #   theme_prefix (string) — forwarded to theme-toggle partial ('demo'|'os'|'platform')
+ #   nav_label (string) — aria-label on the <nav> (e.g. 'Site navigation')
  #
  # Block (optional override — only reachable via `{% embed %}`):
  #   actions_extras — site-specific links injected BEFORE the theme-toggle
@@ -18,7 +17,7 @@
 
     <div class="demo-nav__actions">
         {% block actions_extras %}{% endblock %}
-        {% include '@project-layouts-theme-base/partials/nav/theme-toggle.html.twig' with {theme_prefix: theme_prefix} only %}
+        {% include '@project-layouts-theme-base/partials/nav/theme-toggle.html.twig' %}
         {% include '@project-layouts-theme-base/partials/nav/socials.html.twig' %}
     </div>
 </nav>
