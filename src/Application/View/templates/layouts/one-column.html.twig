@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="{{ app.request.locale ?? app.request.defaultLocale ?? 'en' }}">
   <head>
     <meta charset="utf-8" />
     <title>{% block title %}{{ title|default('Semitexa') }}{% endblock %}</title>
@@ -26,5 +26,4 @@
     {{ inject_scripts('body') }}
   </body>
 </html>
-
 

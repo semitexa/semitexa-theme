@@ -10,7 +10,7 @@
  #   actions_extras — site-specific links injected BEFORE the theme-toggle
  #                    (e.g. sign-in on semitexa-site). Empty by default.
  #}
-<nav class="demo-nav" aria-label="{{ nav_label }}">
+<nav class="demo-nav" aria-label="{{ nav_label|default('Site navigation') }}">
     {% include '@project-layouts-theme-base/partials/nav/brand.html.twig' %}
 
     <div class="demo-nav__spacer" aria-hidden="true"></div>

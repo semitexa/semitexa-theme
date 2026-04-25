@@ -1,10 +1,11 @@
 <!doctype html>
-<html>
+<html lang="{{ app.request.locale ?? app.request.defaultLocale ?? 'en' }}">
   <head>
     <meta charset="utf-8" />
     <title>{% block title %}{{ title|default('Semitexa') }}{% endblock %}</title>
     <style>
-      .layout{display:grid;grid-template-columns:280px 1fr 280px;gap:24px}
+      .layout{display:grid;grid-template-columns:minmax(220px,280px) minmax(0,1fr) minmax(220px,280px);gap:24px}
+      @media (max-width: 900px){.layout{grid-template-columns:1fr}}
     </style>
     {{ semantic_head() }}
     {{ asset_head() }}
@@ -36,5 +37,4 @@
     {{ inject_scripts('body') }}
   </body>
 </html>
-
 

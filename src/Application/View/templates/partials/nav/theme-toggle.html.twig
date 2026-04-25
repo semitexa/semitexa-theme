@@ -18,3 +18,20 @@
         </span>
     </button>
 </div>
+<script>
+    (function () {
+        var mode = document.documentElement.getAttribute('data-skin-mode') === 'dark' ? 'dark' : 'light';
+        var nextActionLabel = mode === 'dark' ? 'Light mode' : 'Dark mode';
+        var toggle = document.currentScript.previousElementSibling.querySelector('[data-skin-toggle]');
+        var label = document.currentScript.previousElementSibling.querySelector('[data-skin-text]');
+
+        if (toggle !== null) {
+            toggle.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
+            toggle.setAttribute('aria-label', nextActionLabel);
+            toggle.setAttribute('title', nextActionLabel);
+        }
+        if (label !== null) {
+            label.textContent = nextActionLabel;
+        }
+    })();
+</script>
