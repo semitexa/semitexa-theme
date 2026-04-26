@@ -16,8 +16,15 @@ use Semitexa\Theme\Model\ThemeManifest;
  * Filesystem-backed manifest repository.
  *
  * Scan order (all merged; id collisions are fatal):
- *  1. `packages/<vendor>-<pkg>/theme.json`  (composer-installed themes)
- *  2. `src/theme/<id>/theme.json`           (project-owned themes)
+ *  1. `vendor/semitexa/<pkg>/theme.json`    (composer-installed themes — production)
+ *  2. `packages/<vendor>-<pkg>/theme.json`  (path-repo themes — monorepo dev)
+ *  3. `src/theme/<id>/theme.json`           (project-owned themes)
+ *
+ * The `vendor/` and `packages/` branches discover the same kind of artifact
+ * (a packaged theme) but at the two locations Composer can place it: under
+ * `vendor/` after a normal `composer install`, or under `packages/` when the
+ * theme is consumed via a path repository (the monorepo dev layout). Both
+ * scans must run because the same project can have a mix.
  *
  * Validation (all fatal via InvalidThemeConfigException):
  *  - every manifest has a non-empty unique `id`
@@ -121,26 +128,64 @@ final class FileBackedThemeManifestRepository implements ThemeManifestRepository
     private function discover(): array
     {
         $out = [];
+        $seen = [];
+        $seenPackagedThemeKeys = [];
 
-        foreach ((array) @glob($this->projectRoot . '/packages/*/theme.json') as $file) {
+        // Composer-installed packages (production layout). Scoped to the
+        // semitexa vendor namespace, mirroring ThemeDiscovery::packageRoots().
+        foreach ((array) @glob($this->projectRoot . '/vendor/semitexa/*/theme.json') as $file) {
             $file = (string) $file;
-            $dir = dirname($file);
+            $real = (string) (realpath($file) ?: $file);
+            $packageKey = 'semitexa-' . basename(dirname($file));
+            if (isset($seen[$real]) || isset($seenPackagedThemeKeys[$packageKey])) {
+                continue;
+            }
+            $seen[$real] = true;
+            $seenPackagedThemeKeys[$packageKey] = true;
             $out[] = [
                 'file' => $file,
-                'dir' => $dir,
+                'dir' => dirname($file),
+                'source' => 'vendor',
+                'inferred_id' => '',
+            ];
+        }
+
+        // Path-repo packages (monorepo dev layout). Composer's `path` repo with
+        // `symlink: true` makes vendor/<pkg> point at packages/<pkg>, so the
+        // realpath dedup above keeps a manifest from being parsed twice.
+        foreach ((array) @glob($this->projectRoot . '/packages/*/theme.json') as $file) {
+            $file = (string) $file;
+            $real = (string) (realpath($file) ?: $file);
+            $packageKey = basename(dirname($file));
+            if (isset($seen[$real]) || isset($seenPackagedThemeKeys[$packageKey])) {
+                continue;
+            }
+            $seen[$real] = true;
+            $seenPackagedThemeKeys[$packageKey] = true;
+            $out[] = [
+                'file' => $file,
+                'dir' => dirname($file),
                 'source' => 'package',
                 'inferred_id' => '', // packages declare id explicitly; dir name is not used
             ];
         }
 
+        // Project-owned themes (always last so packaged themes can be overridden
+        // by a same-id project theme — though id collisions are still fatal in
+        // validate(); this ordering only affects the duplicate error's "found
+        // at" message).
         foreach ((array) @glob($this->projectRoot . '/src/theme/*/theme.json') as $file) {
             $file = (string) $file;
-            $dir = dirname($file);
+            $real = (string) (realpath($file) ?: $file);
+            if (isset($seen[$real])) {
+                continue;
+            }
+            $seen[$real] = true;
             $out[] = [
                 'file' => $file,
-                'dir' => $dir,
+                'dir' => dirname($file),
                 'source' => 'project',
-                'inferred_id' => basename($dir), // project themes allow dir-name = id
+                'inferred_id' => basename(dirname($file)), // project themes allow dir-name = id
             ];
         }
 
@@ -165,7 +210,7 @@ final class FileBackedThemeManifestRepository implements ThemeManifestRepository
 
     /**
      * @param array<string, mixed> $raw
-     * @param array{file: string, dir: string, source: string, inferred_id: string} $location
+     * @param array{file: string, dir: string, source: 'vendor'|'package'|'project', inferred_id: string} $location
      */
     private function parseManifest(array $raw, array $location): ThemeManifest
     {
