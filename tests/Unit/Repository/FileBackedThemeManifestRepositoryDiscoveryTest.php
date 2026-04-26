@@ -74,7 +74,7 @@ final class FileBackedThemeManifestRepositoryDiscoveryTest extends TestCase
             'skin' => ['default' => 'default'],
         ]);
         mkdir($this->root . '/vendor/semitexa', 0o755, true);
-        if (! symlink('../../packages/semitexa-theme', $this->root . '/vendor/semitexa/theme')) {
+        if (! @symlink('../../packages/semitexa-theme', $this->root . '/vendor/semitexa/theme')) {
             self::markTestSkipped('symlink() failed in this environment — skipping path-repo dedupe test');
         }
 
@@ -83,6 +83,25 @@ final class FileBackedThemeManifestRepositoryDiscoveryTest extends TestCase
 
         self::assertCount(1, $manifests);
         self::assertSame('theme-base', $manifests[0]->id);
+        self::assertSame('vendor', $manifests[0]->source);
+    }
+
+    public function test_dedupes_when_vendor_contains_a_mirrored_copy_of_the_same_path_repo_package(): void
+    {
+        $manifest = [
+            'id' => 'theme-base',
+            'active_when' => ['always' => true],
+            'skin' => ['default' => 'default'],
+        ];
+        $this->writeManifest('packages/semitexa-theme/theme.json', $manifest);
+        $this->writeManifest('vendor/semitexa/theme/theme.json', $manifest);
+
+        $repo = new FileBackedThemeManifestRepository($this->root, $this->fakeSkins(['default']));
+        $manifests = $repo->load();
+
+        self::assertCount(1, $manifests);
+        self::assertSame('theme-base', $manifests[0]->id);
+        self::assertSame('vendor', $manifests[0]->source);
     }
 
     public function test_combines_vendor_theme_base_with_project_local_theme_extending_it(): void

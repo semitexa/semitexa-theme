@@ -129,16 +129,19 @@ final class FileBackedThemeManifestRepository implements ThemeManifestRepository
     {
         $out = [];
         $seen = [];
+        $seenPackagedThemeKeys = [];
 
         // Composer-installed packages (production layout). Scoped to the
         // semitexa vendor namespace, mirroring ThemeDiscovery::packageRoots().
         foreach ((array) @glob($this->projectRoot . '/vendor/semitexa/*/theme.json') as $file) {
             $file = (string) $file;
             $real = (string) (realpath($file) ?: $file);
-            if (isset($seen[$real])) {
+            $packageKey = 'semitexa-' . basename(dirname($file));
+            if (isset($seen[$real]) || isset($seenPackagedThemeKeys[$packageKey])) {
                 continue;
             }
             $seen[$real] = true;
+            $seenPackagedThemeKeys[$packageKey] = true;
             $out[] = [
                 'file' => $file,
                 'dir' => dirname($file),
@@ -153,10 +156,12 @@ final class FileBackedThemeManifestRepository implements ThemeManifestRepository
         foreach ((array) @glob($this->projectRoot . '/packages/*/theme.json') as $file) {
             $file = (string) $file;
             $real = (string) (realpath($file) ?: $file);
-            if (isset($seen[$real])) {
+            $packageKey = basename(dirname($file));
+            if (isset($seen[$real]) || isset($seenPackagedThemeKeys[$packageKey])) {
                 continue;
             }
             $seen[$real] = true;
+            $seenPackagedThemeKeys[$packageKey] = true;
             $out[] = [
                 'file' => $file,
                 'dir' => dirname($file),
@@ -205,7 +210,7 @@ final class FileBackedThemeManifestRepository implements ThemeManifestRepository
 
     /**
      * @param array<string, mixed> $raw
-     * @param array{file: string, dir: string, source: string, inferred_id: string} $location
+     * @param array{file: string, dir: string, source: 'vendor'|'package'|'project', inferred_id: string} $location
      */
     private function parseManifest(array $raw, array $location): ThemeManifest
     {
