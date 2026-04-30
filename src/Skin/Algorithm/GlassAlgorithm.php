@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Skin\Algorithm;
 
-use Semitexa\Theme\Contract\SkinAlgorithm;
+use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 use Semitexa\Theme\Skin\KnobResolver;
 use Semitexa\Theme\Skin\Oklch\Color;
 use Semitexa\Theme\Skin\Oklch\ContrastScore;
@@ -21,7 +21,7 @@ use Semitexa\Theme\Skin\TokenContract;
  * Color math mirrors balanced but lightens surfaces slightly so the
  * frosted panels keep a visible gradient over arbitrary backdrops.
  */
-final class GlassAlgorithm implements SkinAlgorithm
+final class GlassAlgorithm implements SkinAlgorithmInterface
 {
     private const HUE_SUCCESS = 145.0;
     private const HUE_WARNING = 70.0;

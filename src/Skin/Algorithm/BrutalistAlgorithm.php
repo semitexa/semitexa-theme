@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Skin\Algorithm;
 
-use Semitexa\Theme\Contract\SkinAlgorithm;
+use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 use Semitexa\Theme\Skin\KnobResolver;
 use Semitexa\Theme\Skin\Oklch\Color;
 use Semitexa\Theme\Skin\Oklch\ContrastScore;
@@ -23,7 +23,7 @@ use Semitexa\Theme\Skin\TokenContract;
  * look. Neutral mode keeps shadows matte-black (light skin) or matte-white
  * (dark skin, where black-on-black disappears).
  */
-final class BrutalistAlgorithm implements SkinAlgorithm
+final class BrutalistAlgorithm implements SkinAlgorithmInterface
 {
     private const HUE_SUCCESS = 145.0;
     private const HUE_WARNING = 70.0;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Skin\Algorithm;
 
-use Semitexa\Theme\Contract\SkinAlgorithm;
+use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 use Semitexa\Theme\Skin\KnobResolver;
 use Semitexa\Theme\Skin\Oklch\Color;
 use Semitexa\Theme\Skin\Oklch\ContrastScore;
@@ -19,7 +19,7 @@ use Semitexa\Theme\Skin\TokenContract;
  * Knobs let callers soften or sharpen the non-color character without
  * leaving "balanced" territory.
  */
-final class BalancedAlgorithm implements SkinAlgorithm
+final class BalancedAlgorithm implements SkinAlgorithmInterface
 {
     private const HUE_SUCCESS = 145.0;
     private const HUE_WARNING = 70.0;

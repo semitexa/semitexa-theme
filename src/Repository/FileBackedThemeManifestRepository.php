@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Repository;
 
-use Semitexa\Theme\Contract\SkinDiscoveryInterface;
-use Semitexa\Theme\Contract\ThemeManifestRepositoryInterface;
+use Semitexa\Theme\Domain\Contract\SkinDiscoveryInterface;
+use Semitexa\Theme\Domain\Contract\ThemeManifestRepositoryInterface;
 use Semitexa\Theme\Exception\InvalidThemeConfigException;
 use Semitexa\Theme\Model\ActiveWhen;
 use Semitexa\Theme\Model\SkinCondition;

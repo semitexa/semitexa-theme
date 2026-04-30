@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Discovery;
 
-use Semitexa\Theme\Contract\SkinDiscoveryInterface;
+use Semitexa\Theme\Domain\Contract\SkinDiscoveryInterface;
 use Semitexa\Theme\Model\SkinEntry;
 
 /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Skin;
 
-use Semitexa\Theme\Contract\SkinAlgorithm;
+use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 
 /**
  * Drives the dual-mode generation flow shared by skins:generate and
@@ -19,7 +19,7 @@ final class SkinBuilder
      * @param array<string, string> $knobs Resolved (full schema with defaults applied).
      */
     public function buildDualPalette(
-        SkinAlgorithm $algorithm,
+        SkinAlgorithmInterface $algorithm,
         string $seedHex,
         array $knobs,
         float $contrastFloor = 4.5,

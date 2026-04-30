@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Semitexa\Theme\Runtime;
 
 use Semitexa\Core\Theme\ThemeProviderInterface;
-use Semitexa\Theme\Contract\ThemeManifestRepositoryInterface;
+use Semitexa\Theme\Domain\Contract\ThemeManifestRepositoryInterface;
 
 /**
  * Concrete `ThemeProviderInterface` implementation backed by the

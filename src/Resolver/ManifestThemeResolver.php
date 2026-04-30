@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Resolver;
 
-use Semitexa\Theme\Contract\SkinDiscoveryInterface;
-use Semitexa\Theme\Contract\ThemeManifestRepositoryInterface;
-use Semitexa\Theme\Contract\ThemeResolverInterface;
+use Semitexa\Theme\Domain\Contract\SkinDiscoveryInterface;
+use Semitexa\Theme\Domain\Contract\ThemeManifestRepositoryInterface;
+use Semitexa\Theme\Domain\Contract\ThemeResolverInterface;
 use Semitexa\Theme\Discovery\ThemeDiscovery;
 use Semitexa\Theme\Exception\ThemeResolutionException;
 use Semitexa\Theme\Model\ThemeAssignment;

@@ -9,7 +9,7 @@ final readonly class SkinParams
     /**
      * @param array<string, string> $knobs Algorithm-specific tunable parameters.
      *                                     Keys + allowed values per algorithm
-     *                                     are defined by SkinAlgorithm::knobSchema().
+     *                                     are defined by SkinAlgorithmInterface::knobSchema().
      *                                     Missing knobs default from the schema.
      */
     public function __construct(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Semitexa\Theme\Contract;
+namespace Semitexa\Theme\Domain\Contract;
 
 use Semitexa\Theme\Model\SkinEntry;
 

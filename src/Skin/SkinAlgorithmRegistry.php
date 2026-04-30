@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Skin;
 
-use Semitexa\Theme\Contract\SkinAlgorithm;
+use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 use Semitexa\Theme\Skin\Algorithm\BalancedAlgorithm;
 use Semitexa\Theme\Skin\Algorithm\BrutalistAlgorithm;
 use Semitexa\Theme\Skin\Algorithm\GlassAlgorithm;
@@ -21,7 +21,7 @@ use Semitexa\Theme\Skin\Algorithm\GlassAlgorithm;
 final class SkinAlgorithmRegistry
 {
     /**
-     * @return list<SkinAlgorithm>
+     * @return list<SkinAlgorithmInterface>
      */
     public function all(): array
     {
@@ -37,10 +37,10 @@ final class SkinAlgorithmRegistry
      */
     public function ids(): array
     {
-        return array_map(static fn (SkinAlgorithm $a) => $a->id(), $this->all());
+        return array_map(static fn (SkinAlgorithmInterface $a) => $a->id(), $this->all());
     }
 
-    public function get(string $id): SkinAlgorithm
+    public function get(string $id): SkinAlgorithmInterface
     {
         foreach ($this->all() as $algorithm) {
             if ($algorithm->id() === $id) {

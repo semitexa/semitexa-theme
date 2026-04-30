@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Semitexa\Theme\Contract;
+namespace Semitexa\Theme\Domain\Contract;
 
 use Semitexa\Theme\Skin\SkinPalette;
 use Semitexa\Theme\Skin\SkinParams;
 
-interface SkinAlgorithm
+interface SkinAlgorithmInterface
 {
     public function id(): string;
 
