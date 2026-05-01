@@ -6,8 +6,8 @@ namespace Semitexa\Theme\Application\Console\Command;
 
 use Semitexa\Core\Attribute\AsCommand;
 use Semitexa\Theme\Exception\InvalidThemeConfigException;
-use Semitexa\Theme\Model\ThemeManifest;
-use Semitexa\Theme\Runtime\ThemeResolverBootstrap;
+use Semitexa\Theme\Domain\Model\ThemeManifest;
+use Semitexa\Theme\Application\Service\Runtime\ThemeResolverBootstrap;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

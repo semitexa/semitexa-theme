@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Domain\Contract;
 
-use Semitexa\Theme\Model\SkinEntry;
+use Semitexa\Theme\Domain\Model\SkinEntry;
 
 /**
  * Enumerates skins known to the resolver.

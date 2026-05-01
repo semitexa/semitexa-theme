@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Domain\Contract;
 
-use Semitexa\Theme\Skin\SkinPalette;
-use Semitexa\Theme\Skin\SkinParams;
+use Semitexa\Theme\Application\Service\Skin\SkinPalette;
+use Semitexa\Theme\Application\Service\Skin\SkinParams;
 
 interface SkinAlgorithmInterface
 {

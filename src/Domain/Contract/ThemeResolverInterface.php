@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Semitexa\Theme\Domain\Contract;
 
 use Semitexa\Theme\Exception\ThemeResolutionException;
-use Semitexa\Theme\Model\ThemeAssignment;
-use Semitexa\Theme\Model\ThemeContext;
+use Semitexa\Theme\Domain\Model\ThemeAssignment;
+use Semitexa\Theme\Domain\Model\ThemeContext;
 
 /**
  * Resolves the active theme + skin for a request context.

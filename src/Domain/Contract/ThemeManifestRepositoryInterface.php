@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Semitexa\Theme\Domain\Contract;
 
 use Semitexa\Theme\Exception\InvalidThemeConfigException;
-use Semitexa\Theme\Model\ThemeManifest;
+use Semitexa\Theme\Domain\Model\ThemeManifest;
 
 /**
  * Source of truth for theme manifests (replaces ThemeRulesRepositoryInterface).
