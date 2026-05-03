@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Discovery;
 
-use Semitexa\Theme\Contract\SkinDiscoveryInterface;
-use Semitexa\Theme\Model\SkinEntry;
+use Semitexa\Theme\Domain\Contract\SkinDiscoveryInterface;
+use Semitexa\Theme\Domain\Model\SkinEntry;
 
 /**
  * Filesystem-backed skin discovery.
  *
  * Two sources, in priority order (later overrides earlier when slugs collide):
  *
- *   1. `vendor/semitexa/theme/src/Application/Static/skins/` — framework
+ *   1. `vendor/semitexa/theme/src/Application/Static/css/skins/` — framework
  *      default. Ships the single `default` skin used as the baseline when no
  *      project skin matches. (Was previously in semitexa/skins-base before
  *      the ep-ssr-theme-skin-reconciliation fold.)
@@ -29,7 +29,7 @@ final class SkinDiscovery implements SkinDiscoveryInterface
 {
     public const ASSET_URL_PREFIX = '/assets/skins';
     public const PROJECT_SKINS_DIR = '/src/skins';
-    public const FRAMEWORK_SKINS_DIR = '/vendor/semitexa/theme/src/Application/Static/skins';
+    public const FRAMEWORK_SKINS_DIR = '/vendor/semitexa/theme/src/Application/Static/css/skins';
 
     public function __construct(
         private readonly string $projectRoot,

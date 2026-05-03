@@ -1,6 +1,6 @@
 {
     "name": "semitexa/theme",
-    "description": "Semitexa theme/skin resolver layer + base theme (layouts, partials, default skin, SkinAlgorithm contract). Framework + theme-base rolled into one package.",
+    "description": "Semitexa theme/skin resolver layer + base theme (layouts, partials, default skin, SkinAlgorithmInterface contract). Framework + theme-base rolled into one package.",
     "type": "semitexa-module",
     "license": "MIT",
     "keywords": [
@@ -34,7 +34,7 @@
     "extra": {
         "semitexa-module": {
             "name": "theme-base",
-            "description": "Theme resolver + base theme: layouts, partials, default skin, SkinAlgorithm contract",
+            "description": "Theme resolver + base theme: layouts, partials, default skin, SkinAlgorithmInterface contract",
             "template_alias": "theme-base"
         }
     }

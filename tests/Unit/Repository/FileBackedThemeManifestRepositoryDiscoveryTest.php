@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Semitexa\Theme\Tests\Unit\Repository;
 
 use PHPUnit\Framework\TestCase;
-use Semitexa\Theme\Contract\SkinDiscoveryInterface;
+use Semitexa\Theme\Domain\Contract\SkinDiscoveryInterface;
 use Semitexa\Theme\Exception\InvalidThemeConfigException;
-use Semitexa\Theme\Model\SkinEntry;
-use Semitexa\Theme\Repository\FileBackedThemeManifestRepository;
+use Semitexa\Theme\Domain\Model\SkinEntry;
+use Semitexa\Theme\Application\Service\Repository\FileBackedThemeManifestRepository;
 
 /**
  * Discovery regression suite — guards the three layouts the repository must
