@@ -37,5 +37,6 @@
             "description": "Theme resolver + base theme: layouts, partials, default skin, SkinAlgorithmInterface contract",
             "template_alias": "theme-base"
         }
-    }
+    },
+    "version": "v0.0.1"
 }
