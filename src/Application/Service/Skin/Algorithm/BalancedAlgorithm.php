@@ -219,8 +219,8 @@ final class BalancedAlgorithm implements SkinAlgorithmInterface
             $attempt = $attempt->withLightness($next);
         }
         return $mode === SkinMode::Dark
-            ? Color::fromHex('#ffffff')
-            : Color::fromHex('#111111');
+            ? Converter::hexToOklch('#ffffff')
+            : Converter::hexToOklch('#111111');
     }
 
     private function pickOnAccentText(string $accentHex): string
