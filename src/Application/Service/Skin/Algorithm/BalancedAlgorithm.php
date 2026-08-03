@@ -7,7 +7,6 @@ namespace Semitexa\Theme\Application\Service\Skin\Algorithm;
 use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 use Semitexa\Theme\Application\Service\Skin\KnobResolver;
 use Semitexa\Theme\Application\Service\Skin\Oklch\Color;
-use Semitexa\Theme\Application\Service\Skin\Oklch\ContrastScore;
 use Semitexa\Theme\Application\Service\Skin\Oklch\Converter;
 use Semitexa\Theme\Application\Service\Skin\SkinMode;
 use Semitexa\Theme\Application\Service\Skin\SkinPalette;
@@ -21,6 +20,8 @@ use Semitexa\Theme\Application\Service\Skin\TokenContract;
  */
 final class BalancedAlgorithm implements SkinAlgorithmInterface
 {
+    use EnforcesContrast;
+
     private const HUE_SUCCESS = 145.0;
     private const HUE_WARNING = 70.0;
     private const HUE_DANGER = 25.0;
@@ -195,43 +196,4 @@ final class BalancedAlgorithm implements SkinAlgorithmInterface
         return new Color($l, $c, $seed->h);
     }
 
-    /**
-     * Walk lightness in the direction that IMPROVES contrast against the reference.
-     * Dark backgrounds need the accent to be brighter; light backgrounds, darker.
-     * Prior code only darkened, which produced unreadable accents against dark surfaces.
-     */
-    private function ensureContrastAgainst(Color $color, string $referenceHex, float $floor, SkinMode $mode): Color
-    {
-        $attempt = $color;
-        $step = $mode === SkinMode::Dark ? 0.03 : -0.03;
-        $bound = $mode === SkinMode::Dark ? 0.95 : 0.10;
-        for ($i = 0; $i < 20; $i++) {
-            $hex = $this->hex($attempt);
-            if (ContrastScore::contrast($hex, $referenceHex) >= $floor) {
-                return $attempt;
-            }
-            $next = $attempt->l + $step;
-            if ($mode === SkinMode::Dark) {
-                $next = min($bound, $next);
-            } else {
-                $next = max($bound, $next);
-            }
-            $attempt = $attempt->withLightness($next);
-        }
-        return $mode === SkinMode::Dark
-            ? Converter::hexToOklch('#ffffff')
-            : Converter::hexToOklch('#111111');
-    }
-
-    private function pickOnAccentText(string $accentHex): string
-    {
-        $whiteContrast = ContrastScore::contrast($accentHex, '#ffffff');
-        $blackContrast = ContrastScore::contrast($accentHex, '#111111');
-        return $whiteContrast >= $blackContrast ? '#ffffff' : '#111111';
-    }
-
-    private function hex(Color $color): string
-    {
-        return Converter::oklchToHex($color);
-    }
 }
