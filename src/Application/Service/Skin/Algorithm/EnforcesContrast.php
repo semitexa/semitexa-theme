@@ -30,12 +30,23 @@ trait EnforcesContrast
      * reference, then give up gracefully.
      *
      * Direction follows the mode — lighten on dark skins, darken on light ones —
-     * and stops at a bound short of pure white/black so the nudge stays within
-     * the palette's character. The 20-step cap matters: contrast is not
-     * guaranteed to be reachable (a mid-grey reference can defeat both
-     * directions), and an unbounded loop here would hang skin generation. When
-     * the walk runs out, plain white or near-black is returned — ugly against
-     * some palettes, but readable, which is the property being defended.
+     * toward a bound short of pure white/black so the nudge stays within the
+     * palette's character. The 20-step cap matters: contrast is not guaranteed to
+     * be reachable (a mid-grey reference can defeat both directions), and an
+     * unbounded loop here would hang skin generation. When the walk runs out,
+     * plain white or near-black is returned — ugly against some palettes, but
+     * readable, which is the property being defended.
+     *
+     * Note that the cap and the bound do not quite line up. Contrast is checked
+     * before each step, so the walk evaluates the seed plus 19 steps of 0.03 —
+     * 0.57 of lightness — against seeds normalizeSeed() clamps to roughly
+     * [0.35, 0.70]. That reaches the bound from most of the range, but not from
+     * its far end: a dark-mode seed below ~0.38 tops out around 0.92 and a
+     * light-mode seed above ~0.67 bottoms out around 0.13, so those never test the
+     * bound itself and fall through to white/near-black one step early. Carried
+     * over verbatim from the three copies this trait replaced; driving the loop
+     * from the range rather than a fixed count would close it, at the cost of
+     * changing generated skins.
      */
     private function ensureContrastAgainst(Color $color, string $referenceHex, float $floor, SkinMode $mode): Color
     {
