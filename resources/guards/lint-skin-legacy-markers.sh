@@ -29,7 +29,27 @@
 # ─────────────────────────────────────────────────────────────────────────────
 set -eu
 
-PROJECT_ROOT="${PROJECT_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
+# The project root. bin/semitexa passes PROJECT_ROOT; running this script by
+# hand has to work too.
+#
+# `dirname "$0"/..` was correct while this lived in <project>/scripts/. It is
+# wrong now: the guard ships inside semitexa/theme, so the same expression lands
+# on <package>/resources and every guarded path resolves under it. Depth to the
+# project differs between a vendor install, a monorepo package and a
+# project-local copy, so walk up to the marker instead of counting directories.
+if [ -z "${PROJECT_ROOT:-}" ]; then
+    _dir="$(cd "$(dirname "$0")" && pwd -P)"
+    while [ ! -f "$_dir/vendor/autoload.php" ]; do
+        _parent="$(dirname "$_dir")"
+        if [ "$_parent" = "$_dir" ]; then
+            printf "Cannot locate the project root from %s.\n" "$(dirname "$0")" >&2
+            printf "Set PROJECT_ROOT, or run: bin/semitexa lint:skin-legacy\n" >&2
+            exit 1
+        fi
+        _dir="$_parent"
+    done
+    PROJECT_ROOT="$_dir"
+fi
 
 # The two guard scripts live inside semitexa-theme, which this guard scans, and
 # they carry the forbidden-marker list as literals. Without this the guard flags
