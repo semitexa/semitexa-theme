@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Application\Service\Runtime;
 
+use Semitexa\Core\Log\StaticLoggerBridge;
 use Semitexa\Core\Theme\ThemeProviderInterface;
 use Semitexa\Theme\Domain\Contract\ThemeManifestRepositoryInterface;
 
@@ -19,7 +20,9 @@ use Semitexa\Theme\Domain\Contract\ThemeManifestRepositoryInterface;
  * has run (e.g., bootstrap, CLI rendering, or projects that haven't
  * enabled the theme manifest pipeline). Replacing this fallback with a
  * hard-fail or explicit default is tracked separately under
- * `tk-resolver-fallback-audit-followup`.
+ * `tk-resolver-fallback-audit-followup`. The other fallback in this class —
+ * a manifest chain that cannot be built — degrades too, but says so in the
+ * log rather than passing for normal operation.
  */
 final class ThemeContextProvider implements ThemeProviderInterface
 {
@@ -36,9 +39,19 @@ final class ThemeContextProvider implements ThemeProviderInterface
         }
         try {
             $chain = $this->manifests->chainOf($assignment->theme);
-        } catch (\Throwable) {
-            // Config changed mid-worker and leaf theme disappeared — fall back
-            // to single-id chain. Logged by resolver on next assignment build.
+        } catch (\Throwable $e) {
+            // Config changed mid-worker and the leaf theme disappeared. Degrading
+            // to a single-id chain is deliberate — a live request must not 500
+            // because a manifest moved under it — but it is a degrade, and the
+            // only other caller of chainOf() (ManifestThemeResolver) does not
+            // catch at all. This comment used to say the resolver logged it on
+            // the next assignment build. It did not: the package had no logging
+            // of any kind, so a theme could vanish and leave no trace anywhere.
+            StaticLoggerBridge::warning('theme', 'Theme chain unavailable; serving the assigned theme alone', [
+                'theme' => $assignment->theme,
+                'message' => $e->getMessage(),
+            ]);
+
             return [$assignment->theme];
         }
         return array_map(static fn ($m) => $m->id, $chain);
