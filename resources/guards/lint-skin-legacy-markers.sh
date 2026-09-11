@@ -13,10 +13,13 @@
 # attributes, and `semitexa_{site}_site_theme` localStorage keys are gone from
 # these packages. This script fails (exit 1) if any of them re-appear.
 #
-# Out-of-scope (deferred to `tk-demo-hello-skin-migration-followup`):
-#   - packages/semitexa-demo
-#   - packages/semitexa-ultimate (Hello scaffold)
-# Both still own a separate legacy theme system. They are deliberately skipped.
+# There is no out-of-scope package any more. semitexa-demo and
+# semitexa-ultimate (the Hello scaffold) were the last two holdouts — the demo
+# carried a full per-site copy of the contract down to its own localStorage key,
+# and both were skipped here on purpose while that was true. They were migrated
+# in `tk-demo-hello-skin-migration-followup` and are now scanned like the rest.
+# A guard with a standing exception is a guard that reports on the part nobody
+# was worried about.
 #
 # Also asserts that the three sites' Static/js/site.js are byte-identical.
 # Drift may indicate per-site logic creeping back in. If you intentionally
@@ -78,8 +81,9 @@ info()  { printf "%s[INFO]%s  %s\n"    "$C_CYAN"   "$C_RESET" "$*"; }
 warn()  { printf "%s[WARN]%s  %s\n"    "$C_YELLOW" "$C_RESET" "$*" >&2; }
 fail()  { printf "%s[FAIL]%s  %s\n"    "$C_RED"    "$C_RESET" "$*" >&2; }
 
-# Marketing site packages covered by the guard. Any new marketing-site package
-# should be added here — adding it makes the guard apply automatically.
+# Packages covered by the guard: everything that ships frontend carrying the
+# skin-mode contract. Any new one should be added here — adding it makes the
+# guard apply automatically.
 #
 # semitexa-site, semitexa-os-site and semitexa-platform-site used to be listed
 # here. They are gone: absent from packages/, from composer.json, from
@@ -89,6 +93,9 @@ fail()  { printf "%s[FAIL]%s  %s\n"    "$C_RED"    "$C_RESET" "$*" >&2; }
 # actually bought.
 GUARDED_PACKAGES="
 packages/semitexa-theme
+packages/semitexa-demo
+packages/semitexa-ultimate
+packages/semitexa-showcase-kit
 "
 
 # Forbidden markers. Each is the literal string that must not appear in any
@@ -191,8 +198,10 @@ if [ "$violations" -eq 0 ]; then
 fi
 
 fail "Skin-mode legacy guard: $violations issue(s)."
-info "Deferred legacy lives in semitexa-demo and semitexa-ultimate/Hello"
-info "(tracked under tk-demo-hello-skin-migration-followup) — those packages"
-info "are intentionally NOT scanned by this guard."
+info "One contract, everywhere: data-skin-mode on the root, data-skin-toggle /"
+info "data-skin-text on the control, localStorage key 'semitexa_skin_mode'."
+info "The pre-paint script has one home — include"
+info "@project-layouts-theme-base/partials/head/theme-switcher.html.twig"
+info "rather than copying its three lines into another page."
 printf "\n"
 exit 1
