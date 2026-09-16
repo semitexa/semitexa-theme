@@ -13,7 +13,7 @@
  # No params. Site toggle buttons must read/write the same unified
  # attribute + localStorage key.
  #}
-<script>
+<script{{ csp_nonce_attr() }}>
     (function () {
         var root = document.documentElement;
         try {

@@ -18,7 +18,7 @@
         </span>
     </button>
 </div>
-<script>
+<script{{ csp_nonce_attr() }}>
     (function () {
         var mode = document.documentElement.getAttribute('data-skin-mode') === 'dark' ? 'dark' : 'light';
         var nextActionLabel = mode === 'dark' ? 'Light mode' : 'Dark mode';
