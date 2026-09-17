@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.4",
         "semitexa/core": "*",
-        "semitexa/ssr": "*",
+        "semitexa/ssr": ">=2026.09.17.1037 || dev-master",
         "semitexa/locale": "*",
         "semitexa/tenancy": "*"
     },
