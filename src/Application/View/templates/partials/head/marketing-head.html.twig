@@ -16,7 +16,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}{{ page_title()|default(site_title|default('Semitexa')) }}{% endblock %}</title>
-{% include '@project-layouts-theme-base/partials/head/google-fonts-preconnect.html.twig' %}
+{# A preconnect belongs next to the request it warms, so it lives in the
+   fonts block with whatever face the site actually declares. Emitting one
+   from here assumed every consumer fetches from fonts.googleapis.com, and
+   opened two connections for nothing on every site that does not. #}
 {% block fonts %}{% endblock %}
 {% block meta_extra %}
     {{ meta('description') }}
