@@ -24,12 +24,21 @@ use Semitexa\Theme\Domain\Model\SkinEntry;
  * pointing to both dirs (project first → priority override).
  *
  * A skin is discoverable iff `<source>/<slug>/tokens.css` exists.
+ *
+ * The scan runs once per instance and is cached for its lifetime: the
+ * resolver (ThemeResolverBootstrap) keeps one instance per worker and calls
+ * find() on every request, and skins are installed files — same contract as
+ * FileBackedThemeManifestRepository, whose manifests reference these slugs
+ * and are likewise cached until the worker restarts.
  */
 final class SkinDiscovery implements SkinDiscoveryInterface
 {
     public const ASSET_URL_PREFIX = '/assets/skins';
     public const PROJECT_SKINS_DIR = '/src/skins';
     public const FRAMEWORK_SKINS_DIR = '/vendor/semitexa/theme/src/Application/Static/css/skins';
+
+    /** @var array<string, SkinEntry>|null slug => entry, alphabetical */
+    private ?array $bySlug = null;
 
     public function __construct(
         private readonly string $projectRoot,
@@ -38,6 +47,23 @@ final class SkinDiscovery implements SkinDiscoveryInterface
 
     /** @return list<SkinEntry> */
     public function availableSkins(): array
+    {
+        return array_values($this->bySlug ??= $this->scan());
+    }
+
+    public function find(string $slug): ?SkinEntry
+    {
+        return ($this->bySlug ??= $this->scan())[$slug] ?? null;
+    }
+
+    /** @return list<string> */
+    public function availableSlugs(): array
+    {
+        return array_map(static fn (SkinEntry $e) => $e->slug, $this->availableSkins());
+    }
+
+    /** @return array<string, SkinEntry> */
+    private function scan(): array
     {
         $bySlug = [];
         foreach ($this->sources() as $source) {
@@ -57,23 +83,7 @@ final class SkinDiscovery implements SkinDiscoveryInterface
             }
         }
         ksort($bySlug);
-        return array_values($bySlug);
-    }
-
-    public function find(string $slug): ?SkinEntry
-    {
-        foreach ($this->availableSkins() as $entry) {
-            if ($entry->slug === $slug) {
-                return $entry;
-            }
-        }
-        return null;
-    }
-
-    /** @return list<string> */
-    public function availableSlugs(): array
-    {
-        return array_map(static fn (SkinEntry $e) => $e->slug, $this->availableSkins());
+        return $bySlug;
     }
 
     /**
