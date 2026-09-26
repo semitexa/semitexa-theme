@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Application\Service\Runtime;
 
+use Semitexa\Core\Lifecycle\PerRequestStateRegistry;
 use Semitexa\Theme\Domain\Model\ThemeAssignment;
 use Swoole\Coroutine;
 
@@ -15,13 +16,18 @@ use Swoole\Coroutine;
  *
  * Mirrors the pattern used by Semitexa\Locale\Context\LocaleContextStore
  * and Semitexa\Ssr\Application\Service\Asset\AssetCollectorStore: Swoole\Coroutine::getContext()
- * under Swoole; a static fallback for CLI/tests.
+ * under Swoole; a static fallback for CLI/tests. The queue worker runs each
+ * job outside a coroutine, so the fallback is reset through
+ * {@see PerRequestStateRegistry} after every unit of work — otherwise one
+ * tenant's job leaves its theme for the next job on the worker.
  */
 final class ThemeContextStore
 {
     private const KEY = '__semitexa_theme_assignment';
 
     private static ?ThemeAssignment $staticFallback = null;
+
+    private static bool $registered = false;
 
     public static function set(ThemeAssignment $assignment): void
     {
@@ -30,6 +36,7 @@ final class ThemeContextStore
             return;
         }
 
+        self::ensureRegistered();
         self::$staticFallback = $assignment;
     }
 
@@ -68,6 +75,19 @@ final class ThemeContextStore
         }
 
         self::$staticFallback = null;
+    }
+
+    /** Lazy, so a worker that never assigns a theme registers nothing. */
+    private static function ensureRegistered(): void
+    {
+        if (self::$registered) {
+            return;
+        }
+
+        PerRequestStateRegistry::register('theme_context_store', static function (): void {
+            self::$staticFallback = null;
+        });
+        self::$registered = true;
     }
 
     private static function inCoroutine(): bool
