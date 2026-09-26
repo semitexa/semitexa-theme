@@ -23,7 +23,9 @@ final class ThemeContextStoreResetTest extends TestCase
     {
         // The queue worker runs jobs outside a coroutine and calls resetAll()
         // after each: a theme one tenant's job assigned must not reach the next.
-        ThemeContextStore::set(new ThemeAssignment('acme', 'default', 'ns', '/tokens.css', '/assets/', 0, 'default'));
+        $assignment = new ThemeAssignment('acme', 'default', 'ns', '/tokens.css', '/assets/', 0, 'default');
+        ThemeContextStore::set($assignment);
+        self::assertSame($assignment, ThemeContextStore::getOrNull());
 
         PerRequestStateRegistry::resetAll();
 
