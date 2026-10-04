@@ -27,6 +27,22 @@ use Semitexa\Theme\Application\Service\Skin\SkinMode;
 trait EnforcesContrast
 {
     /**
+     * The contrast the accent must reach against the page.
+     *
+     * In a dark skin the accent is both link text on a near-black page and the
+     * fill behind button labels. At the plain 4.5 floor it lands near
+     * luminance 0.19 — the one band where NEITHER white nor near-black text
+     * clears AA on it (measured: #5f6eea, white 4.28, near-black 4.41). Asking
+     * 6:1 lifts it to a light tone that near-black text reads on at ~5.7:1:
+     * the light-primary / dark-on-primary pairing Material 3 uses in dark
+     * schemes. A light skin keeps the given floor; white already reads there.
+     */
+    private function accentFloor(float $floor, SkinMode $mode): float
+    {
+        return $mode === SkinMode::Dark ? max($floor, 6.0) : $floor;
+    }
+
+    /**
      * Walk a colour's lightness until it clears the contrast floor against a
      * reference, then give up gracefully.
      *
@@ -49,22 +65,6 @@ trait EnforcesContrast
      * from the range rather than a fixed count would close it, at the cost of
      * changing generated skins.
      */
-    /**
-     * The contrast the accent must reach against the page.
-     *
-     * In a dark skin the accent is both link text on a near-black page and the
-     * fill behind button labels. At the plain 4.5 floor it lands near
-     * luminance 0.19 — the one band where NEITHER white nor near-black text
-     * clears AA on it (measured: #5f6eea, white 4.28, near-black 4.41). Asking
-     * 6:1 lifts it to a light tone that near-black text reads on at ~5.7:1:
-     * the light-primary / dark-on-primary pairing Material 3 uses in dark
-     * schemes. A light skin keeps the given floor; white already reads there.
-     */
-    private function accentFloor(float $floor, SkinMode $mode): float
-    {
-        return $mode === SkinMode::Dark ? max($floor, 6.0) : $floor;
-    }
-
     private function ensureContrastAgainst(Color $color, string $referenceHex, float $floor, SkinMode $mode): Color
     {
         $attempt = $color;
