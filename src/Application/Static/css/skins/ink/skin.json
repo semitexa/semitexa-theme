@@ -9,11 +9,11 @@
         "contrast_boost": "standard",
         "shadow_color_mode": "neutral"
     },
-    "generated_at": "2026-10-04T10:26:00+00:00",
-    "updated_at": "2026-10-04T10:26:00+00:00",
+    "generated_at": "2026-10-04T11:23:37+00:00",
+    "updated_at": "2026-10-04T11:23:37+00:00",
     "history": [
         {
-            "at": "2026-10-04T10:26:00+00:00",
+            "at": "2026-10-04T11:23:37+00:00",
             "kind": "generate",
             "algorithm": "brutalist",
             "seed": "#1d4ed8",
@@ -67,7 +67,11 @@
             "--ui-motion-easing-standard": "linear",
             "--ui-motion-easing-emphasized": "linear",
             "--ui-surface-blur": "none",
-            "--ui-surface-saturation": "100%"
+            "--ui-surface-saturation": "100%",
+            "--ui-text-on-success": "#ffffff",
+            "--ui-text-on-warning": "#111111",
+            "--ui-text-on-danger": "#ffffff",
+            "--ui-text-on-info": "#ffffff"
         },
         "dark": {
             "--ui-surface-page": "#030305",
@@ -110,7 +114,11 @@
             "--ui-motion-easing-standard": "linear",
             "--ui-motion-easing-emphasized": "linear",
             "--ui-surface-blur": "none",
-            "--ui-surface-saturation": "100%"
+            "--ui-surface-saturation": "100%",
+            "--ui-text-on-success": "#111111",
+            "--ui-text-on-warning": "#111111",
+            "--ui-text-on-danger": "#ffffff",
+            "--ui-text-on-info": "#111111"
         }
     },
     "description": "Ink \u2014 high-contrast neo-brutalist, cobalt accent"

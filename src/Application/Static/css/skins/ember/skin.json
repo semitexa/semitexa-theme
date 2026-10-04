@@ -9,11 +9,11 @@
         "shadow_intensity": "default",
         "motion_speed": "default"
     },
-    "generated_at": "2026-10-04T10:25:41+00:00",
-    "updated_at": "2026-10-04T10:25:41+00:00",
+    "generated_at": "2026-10-04T11:23:33+00:00",
+    "updated_at": "2026-10-04T11:23:33+00:00",
     "history": [
         {
-            "at": "2026-10-04T10:25:41+00:00",
+            "at": "2026-10-04T11:23:33+00:00",
             "kind": "generate",
             "algorithm": "balanced",
             "seed": "#ea580c",
@@ -67,7 +67,11 @@
             "--ui-motion-easing-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
             "--ui-motion-easing-emphasized": "cubic-bezier(0.3, 0, 0, 1)",
             "--ui-surface-blur": "none",
-            "--ui-surface-saturation": "100%"
+            "--ui-surface-saturation": "100%",
+            "--ui-text-on-success": "#ffffff",
+            "--ui-text-on-warning": "#111111",
+            "--ui-text-on-danger": "#ffffff",
+            "--ui-text-on-info": "#ffffff"
         },
         "dark": {
             "--ui-surface-page": "#0c0807",
@@ -110,7 +114,11 @@
             "--ui-motion-easing-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
             "--ui-motion-easing-emphasized": "cubic-bezier(0.3, 0, 0, 1)",
             "--ui-surface-blur": "none",
-            "--ui-surface-saturation": "100%"
+            "--ui-surface-saturation": "100%",
+            "--ui-text-on-success": "#111111",
+            "--ui-text-on-warning": "#111111",
+            "--ui-text-on-danger": "#111111",
+            "--ui-text-on-info": "#111111"
         }
     },
     "description": "Ember orange \u2014 warm, energetic"

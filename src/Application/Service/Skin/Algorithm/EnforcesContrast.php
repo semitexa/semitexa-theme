@@ -7,6 +7,7 @@ namespace Semitexa\Theme\Application\Service\Skin\Algorithm;
 use Semitexa\Theme\Application\Service\Skin\Oklch\Color;
 use Semitexa\Theme\Application\Service\Skin\Oklch\ContrastScore;
 use Semitexa\Theme\Application\Service\Skin\Oklch\Converter;
+use Semitexa\Theme\Application\Service\Skin\Oklch\OnColor;
 use Semitexa\Theme\Application\Service\Skin\SkinMode;
 
 /**
@@ -69,28 +70,10 @@ trait EnforcesContrast
             : Converter::hexToOklch('#111111');
     }
 
-    /**
-     * Choose the text colour for an accent fill: white when it clears AA,
-     * near-black when only that does, and white again when neither does.
-     *
-     * The last case is the common one for a mid-tone saturated accent in a dark
-     * skin (an indigo lightened to read against a near-black page): both
-     * candidates land around 4.3:1 and the WCAG 2 ratio nudges towards
-     * near-black by a hair, which renders as muddy dark text on a bright
-     * button. WCAG 2 is known to under-rate light text on saturated mid-tones;
-     * APCA scores white clearly ahead there. A tie we cannot win on the ratio is
-     * settled by legibility instead.
-     */
+    /** The text colour for the accent fill; see OnColor for the rule. */
     private function pickOnAccentText(string $accentHex): string
     {
-        $aa = 4.5;
-        if (ContrastScore::contrast($accentHex, '#ffffff') >= $aa) {
-            return '#ffffff';
-        }
-        if (ContrastScore::contrast($accentHex, '#111111') >= $aa) {
-            return '#111111';
-        }
-        return '#ffffff';
+        return OnColor::pick($accentHex);
     }
 
     private function hex(Color $color): string

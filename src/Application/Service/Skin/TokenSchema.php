@@ -33,7 +33,7 @@ final class TokenSchema
      */
     private const SECTION_DESCRIPTIONS = [
         self::SECTION_COLOR  => 'surfaces, borders, text, accent',
-        self::SECTION_STATE  => 'semantic feedback colors + focus ring',
+        self::SECTION_STATE  => 'semantic feedback colors, text on them, focus ring',
         self::SECTION_CHART  => 'categorical 8-step palette',
         self::SECTION_FORM   => 'radius scale',
         self::SECTION_DEPTH  => 'shadow scale',
@@ -65,6 +65,10 @@ final class TokenSchema
             '--ui-state-warning',
             '--ui-state-danger',
             '--ui-state-info',
+            '--ui-text-on-success',
+            '--ui-text-on-warning',
+            '--ui-text-on-danger',
+            '--ui-text-on-info',
             '--ui-focus-ring',
         ],
         self::SECTION_CHART => [
