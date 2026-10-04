@@ -10,7 +10,14 @@ namespace Semitexa\Theme\Application\Service\Skin;
  * The output layout is fixed (see TokenSchema): file header → :root with
  * `color-scheme: light dark` → section dividers in canonical order →
  * tokens via `light-dark(L, D)` (or single value if mode-invariant) →
- * data-skin-mode pinning blocks. Ordering is fully deterministic; running
+ * data-skin-mode pinning blocks.
+ *
+ * `light-dark()` only accepts colours. A mode-varying token that is not a
+ * colour (a shadow) is written with the colours inside it switched instead —
+ * `0 4px 6px light-dark(a, b)` — which is valid wherever a colour may appear.
+ * A shadow wrapped whole in `light-dark()` is invalid at computed-value time,
+ * so every `box-shadow: var(--ui-shadow-*)` silently rendered no shadow at all.
+ * Values whose non-colour parts also differ between modes get mode blocks. Ordering is fully deterministic; running
  * the emitter twice on the same palette + context produces byte-identical
  * output.
  *
@@ -22,12 +29,17 @@ final class TokenEmitter
     /** Trailing characters used between `--ui-...` and its `:` for column alignment. */
     private const NAME_PADDING = 4;
 
+    /** One colour literal: hex, or a colour function without nested parentheses. */
+    private const COLOR_PATTERN = '/#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch|color)\([^()]*\)/';
+
     public function emit(DualSkinPalette $palette, EmitterContext $ctx): string
     {
         TokenSchema::assertCoversTokenContract();
 
         $invariant = array_flip($palette->modeInvariantTokens());
         $lines = $this->header($ctx);
+        /** @var array<string, string> $darkOnly tokens whose dark value needs its own block */
+        $darkOnly = [];
 
         $lines[] = ':root {';
         $lines[] = '    color-scheme: light dark;';
@@ -43,9 +55,11 @@ final class TokenEmitter
                 $lightValue = $palette->light[$name];
                 $darkValue  = $palette->dark[$name];
                 $isInvariant = isset($invariant[$name]);
-                $value = $isInvariant
-                    ? $lightValue
-                    : sprintf('light-dark(%s, %s)', $lightValue, $darkValue);
+                $value = $isInvariant ? $lightValue : $this->modeValue($lightValue, $darkValue);
+                if ($value === null) {
+                    $value = $lightValue;
+                    $darkOnly[$name] = $darkValue;
+                }
                 $padding = str_repeat(' ', $width - strlen($name));
                 $lines[] = sprintf('    %s:%s %s;', $name, $padding, $value);
             }
@@ -57,7 +71,74 @@ final class TokenEmitter
         $lines[] = ':root[data-skin-mode="dark"]  { color-scheme: dark; }';
         $lines[] = '';
 
+        if ($darkOnly !== []) {
+            $declarations = [];
+            foreach ($darkOnly as $name => $value) {
+                $declarations[] = sprintf('%s: %s;', $name, $value);
+            }
+            $body = implode(' ', $declarations);
+            $lines[] = '@media (prefers-color-scheme: dark) { :root:not([data-skin-mode="light"]) { ' . $body . ' } }';
+            $lines[] = ':root[data-skin-mode="dark"] { ' . $body . ' }';
+            $lines[] = '';
+        }
+
         return implode("\n", $lines);
+    }
+
+    /**
+     * The value for a token that differs between modes, or null when it can
+     * only be expressed with a separate dark block.
+     */
+    private function modeValue(string $light, string $dark): ?string
+    {
+        if (self::isColor($light) && self::isColor($dark)) {
+            return sprintf('light-dark(%s, %s)', $light, $dark);
+        }
+
+        [$lightShape, $lightColors] = self::splitColors($light);
+        [$darkShape, $darkColors] = self::splitColors($dark);
+        if ($lightShape !== $darkShape || $lightColors === []) {
+            return null;
+        }
+
+        $i = 0;
+        return (string) preg_replace_callback(
+            '/\x00/',
+            static function () use (&$i, $lightColors, $darkColors): string {
+                $pair = $lightColors[$i] === $darkColors[$i]
+                    ? $lightColors[$i]
+                    : sprintf('light-dark(%s, %s)', $lightColors[$i], $darkColors[$i]);
+                $i++;
+                return $pair;
+            },
+            $lightShape,
+        );
+    }
+
+    private static function isColor(string $value): bool
+    {
+        $value = trim($value);
+        if (preg_match('/^(?:transparent|currentColor)$/i', $value) === 1) {
+            return true;
+        }
+        return preg_match(self::COLOR_PATTERN, $value, $m) === 1 && $m[0] === $value;
+    }
+
+    /**
+     * @return array{0: string, 1: list<string>} the value with each colour replaced by NUL, and the colours in order
+     */
+    private static function splitColors(string $value): array
+    {
+        $colors = [];
+        $shape = (string) preg_replace_callback(
+            self::COLOR_PATTERN,
+            static function (array $m) use (&$colors): string {
+                $colors[] = $m[0];
+                return "\x00";
+            },
+            $value,
+        );
+        return [$shape, $colors];
     }
 
     /**

@@ -113,7 +113,7 @@ final class EnforcesContrastTest extends TestCase
 
     /**
      * @param string $accent   background the text sits on
-     * @param string $expected the colour that wins on contrast
+     * @param string $expected the colour that clears AA, or white when neither does
      */
     #[Test]
     #[DataProvider('accents')]
@@ -132,6 +132,12 @@ final class EnforcesContrastTest extends TestCase
             // on measured contrast, not on an assumption that light takes dark text.
             'very dark accent' => ['#0b0b0b', '#ffffff'],
             'very light accent' => ['#fdfdfd', '#111111'],
+            // Yellow: white fails AA, near-black clears it.
+            'warning yellow' => ['#f0c000', '#111111'],
+            // Neither clears 4.5:1 (white ~4.3, near-black ~4.4): white reads
+            // better on a saturated mid-tone, so the ratio's hair-width lean
+            // towards near-black must not decide it.
+            'mid-tone indigo in a dark skin' => ['#5f6eea', '#ffffff'],
         ];
     }
 }

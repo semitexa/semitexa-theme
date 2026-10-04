@@ -70,15 +70,27 @@ trait EnforcesContrast
     }
 
     /**
-     * Choose the text colour that reads best on an accent — whichever of white
-     * or near-black wins on contrast, rather than assuming light accents take
-     * dark text.
+     * Choose the text colour for an accent fill: white when it clears AA,
+     * near-black when only that does, and white again when neither does.
+     *
+     * The last case is the common one for a mid-tone saturated accent in a dark
+     * skin (an indigo lightened to read against a near-black page): both
+     * candidates land around 4.3:1 and the WCAG 2 ratio nudges towards
+     * near-black by a hair, which renders as muddy dark text on a bright
+     * button. WCAG 2 is known to under-rate light text on saturated mid-tones;
+     * APCA scores white clearly ahead there. A tie we cannot win on the ratio is
+     * settled by legibility instead.
      */
     private function pickOnAccentText(string $accentHex): string
     {
-        return ContrastScore::contrast($accentHex, '#ffffff') >= ContrastScore::contrast($accentHex, '#111111')
-            ? '#ffffff'
-            : '#111111';
+        $aa = 4.5;
+        if (ContrastScore::contrast($accentHex, '#ffffff') >= $aa) {
+            return '#ffffff';
+        }
+        if (ContrastScore::contrast($accentHex, '#111111') >= $aa) {
+            return '#111111';
+        }
+        return '#ffffff';
     }
 
     private function hex(Color $color): string
