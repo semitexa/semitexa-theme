@@ -46,7 +46,7 @@ final class OnColorContrastTest extends TestCase
 
         foreach (['light' => $palette->light, 'dark' => $palette->dark] as $mode => $tokens) {
             $ratio = ContrastScore::contrast($tokens['--ui-accent-brand'], $tokens['--ui-text-on-accent']);
-            self::assertGreaterThanOrEqual(4.5, round($ratio, 2), sprintf(
+            self::assertGreaterThanOrEqual(4.5, $ratio, sprintf(
                 '%s %s %s: %s on %s is %.2f:1',
                 $algorithm->id(), $seed, $mode, $tokens['--ui-text-on-accent'], $tokens['--ui-accent-brand'], $ratio,
             ));
