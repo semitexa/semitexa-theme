@@ -97,7 +97,7 @@ final class ThemeResolveCommand extends Command
                 'context' => ['tenant' => $tenant, 'domain' => $ctx->domain, 'locale' => $locale],
                 'assignment' => $this->assignmentToArray($assignment),
                 'inventory' => $inventory,
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
             return Command::SUCCESS;
         }
 
@@ -113,7 +113,7 @@ final class ThemeResolveCommand extends Command
                 'artifact' => 'semitexa.theme.resolve/v1',
                 'context' => $ctx,
                 'error' => $message,
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
         } else {
             $output->writeln("<error>{$message}</error>");
         }

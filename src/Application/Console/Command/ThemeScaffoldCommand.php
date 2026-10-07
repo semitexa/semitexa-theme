@@ -121,7 +121,7 @@ final class ThemeScaffoldCommand extends Command
                 'domain' => $domain,
                 'theme_dir' => $themeDir,
                 'manifest_path' => $manifestPath,
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
             return Command::SUCCESS;
         }
 
@@ -154,7 +154,7 @@ final class ThemeScaffoldCommand extends Command
                 'theme_dir' => $themeDir,
                 'manifest_path' => $manifestPath,
                 'note' => 'Already exists — pass --force to overwrite.',
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
             return Command::SUCCESS;
         }
         $output->writeln("<comment>⤸ Theme already exists: {$slug}</comment>");
@@ -171,7 +171,7 @@ final class ThemeScaffoldCommand extends Command
                 'artifact' => 'semitexa.theme.scaffold/v1',
                 'verdict' => 'fail',
                 'error' => $message,
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
         } else {
             $output->writeln("<error>✗ {$message}</error>");
         }
