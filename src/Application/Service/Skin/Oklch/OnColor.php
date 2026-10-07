@@ -23,6 +23,9 @@ final class OnColor
 
     public static function pick(string $fillHex): string
     {
+        if (preg_match('/\A#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])\z/', $fillHex, $m) === 1) {
+            $fillHex = '#' . $m[1] . $m[1] . $m[2] . $m[2] . $m[3] . $m[3];
+        }
         if (preg_match('/\A#[0-9a-fA-F]{6}\z/', $fillHex) !== 1) {
             return self::LIGHT;
         }
