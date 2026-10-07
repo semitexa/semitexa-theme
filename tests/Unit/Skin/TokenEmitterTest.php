@@ -73,6 +73,16 @@ final class TokenEmitterTest extends TestCase
     }
 
     #[Test]
+    public function a_url_reference_is_never_split_into_light_dark(): void
+    {
+        $css = $this->emit([TokenContract::SurfaceBlur->value => ['url(#fade)', 'url(#beef)']]);
+
+        self::assertStringNotContainsString('url(light-dark(', $css);
+        self::assertMatchesRegularExpression('/--ui-surface-blur:\s+url\(#fade\);/', $css);
+        self::assertStringContainsString(':root[data-skin-mode="dark"] { --ui-surface-blur: url(#beef); }', $css);
+    }
+
+    #[Test]
     public function no_light_dark_ever_wraps_a_non_colour(): void
     {
         $css = $this->emit([

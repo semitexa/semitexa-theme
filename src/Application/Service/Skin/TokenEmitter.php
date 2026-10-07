@@ -95,6 +95,13 @@ final class TokenEmitter
             return sprintf('light-dark(%s, %s)', $light, $dark);
         }
 
+        // A fragment reference such as url(#fade) looks like a hex colour, and
+        // light-dark() inside url() is a bad URL token. Such a value switches
+        // in the dark block instead.
+        if (preg_match('/\burl\s*\(/i', $light . ' ' . $dark) === 1) {
+            return null;
+        }
+
         [$lightShape, $lightColors] = self::splitColors($light);
         [$darkShape, $darkColors] = self::splitColors($dark);
         if ($lightShape !== $darkShape || $lightColors === []) {
