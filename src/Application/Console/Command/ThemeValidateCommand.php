@@ -63,7 +63,7 @@ final class ThemeValidateCommand extends Command
                 'verdict' => 'ok',
                 'count' => count($manifests),
                 'manifests' => array_map($this->manifestToArray(...), $manifests),
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
             return Command::SUCCESS;
         }
 
@@ -93,7 +93,7 @@ final class ThemeValidateCommand extends Command
                 'artifact' => 'semitexa.theme.validate/v1',
                 'verdict' => 'fail',
                 'error' => $message,
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), OutputInterface::OUTPUT_RAW);
         } else {
             $output->writeln('<error>✗ Theme config invalid</error>');
             $output->writeln('');

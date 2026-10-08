@@ -25,6 +25,12 @@ enum TokenContract: string
     case StateWarning = '--ui-state-warning';
     case StateDanger = '--ui-state-danger';
     case StateInfo = '--ui-state-info';
+    // Text on a filled state colour. Derived (see DualSkinPalette), so a skin
+    // manifest written before these existed still loads.
+    case TextOnSuccess = '--ui-text-on-success';
+    case TextOnWarning = '--ui-text-on-warning';
+    case TextOnDanger = '--ui-text-on-danger';
+    case TextOnInfo = '--ui-text-on-info';
 
     case FocusRing = '--ui-focus-ring';
 

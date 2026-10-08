@@ -106,7 +106,7 @@ final class GlassAlgorithm implements SkinAlgorithmInterface
         }
 
         $surfacePage = $tokens[TokenContract::SurfacePage->value];
-        $accent = $this->ensureContrastAgainst($seed, $surfacePage, $contrastFloor, $mode);
+        $accent = $this->ensureContrastAgainst($seed, $surfacePage, $this->accentFloor($contrastFloor, $mode), $mode);
         $accentHex = $this->hex($accent);
         $onAccent = $this->pickOnAccentText($accentHex);
         $tokens[TokenContract::AccentBrand->value]          = $accentHex;
