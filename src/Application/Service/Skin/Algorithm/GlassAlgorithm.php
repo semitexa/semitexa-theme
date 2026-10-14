@@ -63,46 +63,47 @@ final class GlassAlgorithm implements SkinAlgorithmInterface
     public function generate(SkinParams $params): SkinPalette
     {
         $knobs = KnobResolver::resolve($params->knobs, $this->knobSchema());
-        $seed = $this->normalizeSeed(Converter::hexToOklch($params->seedHex));
+        $raw = Converter::hexToOklch($params->seedHex);
+        $seed = $this->normalizeSeed($raw);
         $hue = $seed->h;
 
-        $tokens = $this->generateColorTokens($seed, $hue, $params->contrastFloor, $params->mode);
+        $tokens = $this->generateColorTokens($seed, $hue, self::neutralTint($raw), $params->contrastFloor, $params->mode);
         $tokens += $this->generateNonColorTokens($knobs, $params->mode);
 
         return new SkinPalette($tokens);
     }
 
     /** @return array<string, string> */
-    private function generateColorTokens(Color $seed, float $hue, float $contrastFloor, SkinMode $mode): array
+    private function generateColorTokens(Color $seed, float $hue, float $tint, float $contrastFloor, SkinMode $mode): array
     {
         $tokens = [];
 
         if ($mode === SkinMode::Dark) {
             // Glass-dark: surfaces a touch brighter than balanced-dark so backdrop-saturation
             // boost has material to push against (frosted effect needs pale-against-void).
-            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.13, 0.008, $hue));
-            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.20, 0.012, $hue));
-            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(0.24, 0.014, $hue));
-            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.09, 0.008, $hue));
+            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.13, 0.008 * $tint, $hue));
+            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.20, 0.012 * $tint, $hue));
+            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(0.24, 0.014 * $tint, $hue));
+            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.09, 0.008 * $tint, $hue));
 
-            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.30, 0.015, $hue));
-            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.45, 0.020, $hue));
+            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.30, 0.015 * $tint, $hue));
+            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.45, 0.020 * $tint, $hue));
 
-            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.95, 0.010, $hue));
-            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.66, 0.012, $hue));
+            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.95, 0.010 * $tint, $hue));
+            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.66, 0.012 * $tint, $hue));
         } else {
             // surfaces slightly lighter than balanced — frosted-glass effect needs
             // a pale base so backdrop-saturation boost looks right.
-            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.99, 0.003, $hue));
-            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.975, 0.006, $hue));
-            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(1.0, 0.0, $hue));
-            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.95, 0.008, $hue));
+            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.99, 0.003 * $tint, $hue));
+            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.975, 0.006 * $tint, $hue));
+            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(1.0, 0.0 * $tint, $hue));
+            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.95, 0.008 * $tint, $hue));
 
-            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.92, 0.012, $hue));
-            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.80, 0.02, $hue));
+            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.92, 0.012 * $tint, $hue));
+            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.80, 0.02 * $tint, $hue));
 
-            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.22, 0.015, $hue));
-            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.52, 0.012, $hue));
+            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.22, 0.015 * $tint, $hue));
+            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.52, 0.012 * $tint, $hue));
         }
 
         $surfacePage = $tokens[TokenContract::SurfacePage->value];

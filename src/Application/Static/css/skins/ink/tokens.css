@@ -22,7 +22,7 @@
     /* STATE — semantic feedback colors, text on them, focus ring */
     --ui-state-success:       light-dark(#1e7729, #419547);
     --ui-state-warning:       light-dark(#ce871b, #df9632);
-    --ui-state-danger:        light-dark(#ac3031, #ce514d);
+    --ui-state-danger:        light-dark(#ac3031, #c94d49);
     --ui-state-info:          light-dark(#0070b0, #0a8fd1);
     --ui-text-on-success:     light-dark(#ffffff, #111111);
     --ui-text-on-warning:     #111111;

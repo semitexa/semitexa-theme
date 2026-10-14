@@ -65,17 +65,18 @@ final class BrutalistAlgorithm implements SkinAlgorithmInterface
     public function generate(SkinParams $params): SkinPalette
     {
         $knobs = KnobResolver::resolve($params->knobs, $this->knobSchema());
-        $seed = $this->normalizeSeed(Converter::hexToOklch($params->seedHex), $knobs['contrast_boost']);
+        $raw = Converter::hexToOklch($params->seedHex);
+        $seed = $this->normalizeSeed($raw, $knobs['contrast_boost']);
         $hue = $seed->h;
 
-        $tokens = $this->generateColorTokens($seed, $hue, $params->contrastFloor, $knobs['contrast_boost'], $params->mode);
+        $tokens = $this->generateColorTokens($seed, $hue, self::neutralTint($raw), $params->contrastFloor, $knobs['contrast_boost'], $params->mode);
         $tokens += $this->generateNonColorTokens($knobs, $params->mode);
 
         return new SkinPalette($tokens);
     }
 
     /** @return array<string, string> */
-    private function generateColorTokens(Color $seed, float $hue, float $contrastFloor, string $contrastBoost, SkinMode $mode): array
+    private function generateColorTokens(Color $seed, float $hue, float $tint, float $contrastFloor, string $contrastBoost, SkinMode $mode): array
     {
         $tokens = [];
 
@@ -88,16 +89,16 @@ final class BrutalistAlgorithm implements SkinAlgorithmInterface
                 default   => 0.92,
             };
 
-            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.10, 0.006, $hue));
-            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.15, 0.012, $hue));
-            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(0.20, 0.014, $hue));
-            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.06, 0.008, $hue));
+            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.10, 0.006 * $tint, $hue));
+            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.15, 0.012 * $tint, $hue));
+            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(0.20, 0.014 * $tint, $hue));
+            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.06, 0.008 * $tint, $hue));
 
-            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.55, 0.020, $hue));
-            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.92, 0.020, $hue));
+            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.55, 0.020 * $tint, $hue));
+            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.92, 0.020 * $tint, $hue));
 
-            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color($textPrimaryL, 0.010, $hue));
-            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.60, 0.010, $hue));
+            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color($textPrimaryL, 0.010 * $tint, $hue));
+            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.60, 0.010 * $tint, $hue));
         } else {
             $textPrimaryL = match ($contrastBoost) {
                 'high'    => 0.16,
@@ -105,16 +106,16 @@ final class BrutalistAlgorithm implements SkinAlgorithmInterface
                 default   => 0.20,
             };
 
-            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.98, 0.004, $hue));
-            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.95, 0.01, $hue));
-            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(1.0, 0.0, $hue));
-            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.90, 0.015, $hue));
+            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.98, 0.004 * $tint, $hue));
+            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.95, 0.01 * $tint, $hue));
+            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(1.0, 0.0 * $tint, $hue));
+            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.90, 0.015 * $tint, $hue));
 
-            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.70, 0.02, $hue));
-            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.20, 0.02, $hue));
+            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.70, 0.02 * $tint, $hue));
+            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.20, 0.02 * $tint, $hue));
 
-            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color($textPrimaryL, 0.02, $hue));
-            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.45, 0.01, $hue));
+            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color($textPrimaryL, 0.02 * $tint, $hue));
+            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.45, 0.01 * $tint, $hue));
         }
 
         $stateChromaBase = match ($contrastBoost) {
@@ -209,7 +210,9 @@ final class BrutalistAlgorithm implements SkinAlgorithmInterface
             'extreme' => 0.32,
             default   => 0.25,
         };
-        $c = min($chromaMax, max(0.14, $seed->c));
+        // An achromatic seed is a deliberate black/white/grey brand: boosting
+        // its chroma would paint it in a hue it never had.
+        $c = $seed->c < self::ACHROMATIC_CHROMA ? 0.0 : min($chromaMax, max(0.14, $seed->c));
         return new Color($l, $c, $seed->h);
     }
 

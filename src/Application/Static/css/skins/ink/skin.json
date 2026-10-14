@@ -87,7 +87,7 @@
             "--ui-text-on-accent": "#111111",
             "--ui-state-success": "#419547",
             "--ui-state-warning": "#df9632",
-            "--ui-state-danger": "#ce514d",
+            "--ui-state-danger": "#c94d49",
             "--ui-state-info": "#0a8fd1",
             "--ui-focus-ring": "#4f89ff",
             "--ui-chart-1": "#5a89f6",

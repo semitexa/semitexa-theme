@@ -41,7 +41,7 @@
             "--ui-state-success": "#1c882d",
             "--ui-state-warning": "#e38f00",
             "--ui-state-danger": "#c53637",
-            "--ui-state-info": "#007cc7",
+            "--ui-state-info": "#007bc6",
             "--ui-focus-ring": "#4d55e4",
             "--ui-chart-1": "#6e7ed4",
             "--ui-chart-2": "#985ca8",
