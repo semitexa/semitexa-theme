@@ -75,6 +75,30 @@ final class ShippedSkinContrastTest extends TestCase
     }
 
     #[Test]
+    public function translucent_text_is_measured_over_its_fill_not_over_the_page(): void
+    {
+        $rows = SkinContrastAudit::audit(['light' => [
+            '--ui-surface-page' => '#ffffff',
+            '--ui-state-danger' => '#666666',
+            // 50% white over #666666 is #b3b3b3: 2.07:1, not the 5.74 white would give.
+            '--ui-text-on-danger' => 'rgba(255, 255, 255, 0.5)',
+        ]]);
+        $danger = array_values(array_filter($rows, static fn (array $row): bool => $row['background'] === '--ui-state-danger'))[0];
+
+        self::assertSame(round(ContrastScore::contrast('#b3b3b3', '#666666'), 2), $danger['ratio']);
+        self::assertFalse($danger['pass']);
+    }
+
+    #[Test]
+    public function shorthand_hex_is_measured_rather_than_thrown_on(): void
+    {
+        $rows = SkinContrastAudit::audit(['light' => ['--ui-text-primary' => '#fff', '--ui-surface-page' => '#000']]);
+
+        self::assertSame(21.0, $rows[0]['ratio']);
+        self::assertTrue($rows[0]['pass']);
+    }
+
+    #[Test]
     public function apca_matches_the_reference_values(): void
     {
         self::assertEqualsWithDelta(106.04, ContrastScore::apcaLc('#000000', '#ffffff'), 0.01);

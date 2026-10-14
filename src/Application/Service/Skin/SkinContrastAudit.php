@@ -53,8 +53,10 @@ final class SkinContrastAudit
             // older skin.json without on-state tokens gets them derived.
             $tokens = DualSkinPalette::withDerived($tokens);
             foreach (self::PAIRS as [$foreground, $background, $required, $gating]) {
-                $fg = self::opaque($tokens[$foreground] ?? null, $tokens['--ui-surface-page'] ?? null);
-                $bg = self::opaque($tokens[$background] ?? null, $tokens['--ui-surface-page'] ?? null);
+                // The background is seen over the page; the text over the
+                // background it sits on, not over the page.
+                $bg = self::opaque($tokens[$background] ?? null, self::opaque($tokens['--ui-surface-page'] ?? null, null));
+                $fg = self::opaque($tokens[$foreground] ?? null, $bg);
                 // A missing token is a failure, not a pass: the component falls
                 // back to something nobody measured.
                 $measurable = self::isHex($fg) && self::isHex($bg);
@@ -86,11 +88,16 @@ final class SkinContrastAudit
     }
 
     /**
-     * A translucent token (a glass panel) is seen over the page, so it is
-     * measured composited onto an opaque page colour; anything else is kept.
+     * A translucent token is measured composited onto what it is drawn over (a
+     * glass panel over the page, text over its fill); shorthand hex is
+     * expanded; anything else is kept.
      */
     private static function opaque(?string $value, ?string $page): ?string
     {
+        // CSS shorthand (#fff) is valid in a token; the scorer reads six digits.
+        if ($value !== null && preg_match('/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i', trim($value), $short) === 1) {
+            return '#' . $short[1] . $short[1] . $short[2] . $short[2] . $short[3] . $short[3];
+        }
         if ($value === null || !preg_match('/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+)\s*)?\)$/i', trim($value), $m)) {
             return $value;
         }
@@ -106,6 +113,6 @@ final class SkinContrastAudit
 
     private static function isHex(?string $value): bool
     {
-        return is_string($value) && preg_match('/^#[0-9a-f]{3}([0-9a-f]{3})?$/i', $value) === 1;
+        return is_string($value) && preg_match('/^#[0-9a-f]{6}$/i', $value) === 1;
     }
 }
