@@ -79,8 +79,8 @@ final class SkinContrastAudit
     }
 
     /**
-     * @param list<array{gating: bool, pass: bool}> $rows
-     * @return list<array{gating: bool, pass: bool}>
+     * @param list<array{mode: string, foreground: string, background: string, ratio: float|null, apca: float|null, required: float, gating: bool, pass: bool}> $rows
+     * @return list<array{mode: string, foreground: string, background: string, ratio: float|null, apca: float|null, required: float, gating: bool, pass: bool}>
      */
     public static function failures(array $rows): array
     {
