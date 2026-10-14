@@ -10,7 +10,7 @@
         "shadow_softness": "standard"
     },
     "generated_at": "2026-10-04T11:35:17+00:00",
-    "updated_at": "2026-10-04T11:35:17+00:00",
+    "updated_at": "2026-10-14T13:52:24+00:00",
     "history": [
         {
             "at": "2026-10-04T11:35:17+00:00",
@@ -23,6 +23,14 @@
                 "shadow_softness": "standard"
             },
             "source": "seed"
+        },
+        {
+            "at": "2026-10-14T13:52:24+00:00",
+            "kind": "contrast-repair",
+            "changes": [
+                "light --ui-border-strong #918f9c",
+                "dark --ui-border-strong #5d5b69"
+            ]
         }
     ],
     "tokens": {
@@ -32,7 +40,7 @@
             "--ui-surface-raised": "#ffffff",
             "--ui-surface-sunken": "#eeeef3",
             "--ui-border-subtle": "#e5e3ec",
-            "--ui-border-strong": "#bebcca",
+            "--ui-border-strong": "#918f9c",
             "--ui-text-primary": "#1b1921",
             "--ui-text-muted": "#69686f",
             "--ui-accent-brand": "#7a46e0",
@@ -79,7 +87,7 @@
             "--ui-surface-raised": "#1f1e25",
             "--ui-surface-sunken": "#020204",
             "--ui-border-subtle": "#2e2d35",
-            "--ui-border-strong": "#555360",
+            "--ui-border-strong": "#5d5b69",
             "--ui-text-primary": "#eeedf5",
             "--ui-text-muted": "#929199",
             "--ui-accent-brand": "#a578ff",
@@ -121,5 +129,5 @@
             "--ui-text-on-info": "#111111"
         }
     },
-    "description": "Aurora violet \u2014 translucent glass surfaces"
+    "description": "Aurora violet — translucent glass surfaces"
 }

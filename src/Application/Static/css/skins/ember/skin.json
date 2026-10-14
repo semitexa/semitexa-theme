@@ -10,7 +10,7 @@
         "motion_speed": "default"
     },
     "generated_at": "2026-10-04T11:35:13+00:00",
-    "updated_at": "2026-10-04T11:35:13+00:00",
+    "updated_at": "2026-10-14T13:52:24+00:00",
     "history": [
         {
             "at": "2026-10-04T11:35:13+00:00",
@@ -23,6 +23,14 @@
                 "motion_speed": "default"
             },
             "source": "seed"
+        },
+        {
+            "at": "2026-10-14T13:52:24+00:00",
+            "kind": "contrast-repair",
+            "changes": [
+                "light --ui-border-strong #9f8c85",
+                "dark --ui-border-strong #685a55"
+            ]
         }
     ],
     "tokens": {
@@ -32,7 +40,7 @@
             "--ui-surface-raised": "#ffffff",
             "--ui-surface-sunken": "#f1e9e6",
             "--ui-border-subtle": "#e7dbd6",
-            "--ui-border-strong": "#c6b3ab",
+            "--ui-border-strong": "#9f8c85",
             "--ui-text-primary": "#211815",
             "--ui-text-muted": "#69615f",
             "--ui-accent-brand": "#ca3900",
@@ -79,7 +87,7 @@
             "--ui-surface-raised": "#201916",
             "--ui-surface-sunken": "#050302",
             "--ui-border-subtle": "#302723",
-            "--ui-border-strong": "#574a45",
+            "--ui-border-strong": "#685a55",
             "--ui-text-primary": "#f5ece9",
             "--ui-text-muted": "#968d8a",
             "--ui-accent-brand": "#f5621f",
@@ -121,5 +129,5 @@
             "--ui-text-on-info": "#111111"
         }
     },
-    "description": "Ember orange \u2014 warm, energetic"
+    "description": "Ember orange — warm, energetic"
 }

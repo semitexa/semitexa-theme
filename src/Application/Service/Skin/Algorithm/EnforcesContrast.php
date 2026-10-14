@@ -99,6 +99,26 @@ trait EnforcesContrast
             : Converter::hexToOklch('#111111');
     }
 
+    /**
+     * A state fill some text can be read on: in the mid-tone band neither white
+     * nor near-black clears 4.5:1 (an info fill at #007cc7 carried white at
+     * 4.46), so the fill is darkened until white does. Darkening, because
+     * OnColor settles that band on white.
+     */
+    private function ensureReadableFill(Color $fill): Color
+    {
+        $attempt = $fill;
+        for ($i = 0; $i < 40; $i++) {
+            $hex = $this->hex($attempt);
+            if (ContrastScore::contrast($hex, OnColor::LIGHT) >= 4.5 || ContrastScore::contrast($hex, OnColor::DARK) >= 4.5) {
+                return $attempt;
+            }
+            $attempt = $attempt->withLightness(max(0.0, $attempt->l - 0.01));
+        }
+
+        return $attempt;
+    }
+
     /** The text colour for the accent fill; see OnColor for the rule. */
     private function pickOnAccentText(string $accentHex): string
     {

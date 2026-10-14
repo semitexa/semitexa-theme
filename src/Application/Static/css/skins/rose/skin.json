@@ -10,7 +10,7 @@
         "motion_speed": "default"
     },
     "generated_at": "2026-10-04T11:35:15+00:00",
-    "updated_at": "2026-10-04T11:35:15+00:00",
+    "updated_at": "2026-10-14T13:52:24+00:00",
     "history": [
         {
             "at": "2026-10-04T11:35:15+00:00",
@@ -23,6 +23,14 @@
                 "motion_speed": "default"
             },
             "source": "seed"
+        },
+        {
+            "at": "2026-10-14T13:52:24+00:00",
+            "kind": "contrast-repair",
+            "changes": [
+                "light --ui-border-strong #a18c8c",
+                "dark --ui-border-strong #6a5b5b"
+            ]
         }
     ],
     "tokens": {
@@ -32,7 +40,7 @@
             "--ui-surface-raised": "#ffffff",
             "--ui-surface-sunken": "#f2e9e9",
             "--ui-border-subtle": "#e8dada",
-            "--ui-border-strong": "#c7b1b1",
+            "--ui-border-strong": "#a18c8c",
             "--ui-text-primary": "#211818",
             "--ui-text-muted": "#696161",
             "--ui-accent-brand": "#d6023f",
@@ -79,7 +87,7 @@
             "--ui-surface-raised": "#201818",
             "--ui-surface-sunken": "#050303",
             "--ui-border-subtle": "#302626",
-            "--ui-border-strong": "#584949",
+            "--ui-border-strong": "#6a5b5b",
             "--ui-text-primary": "#f5ecec",
             "--ui-text-muted": "#968c8c",
             "--ui-accent-brand": "#ff4762",
@@ -121,5 +129,5 @@
             "--ui-text-on-info": "#111111"
         }
     },
-    "description": "Rose \u2014 bold, expressive"
+    "description": "Rose — bold, expressive"
 }

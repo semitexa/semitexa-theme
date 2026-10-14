@@ -10,7 +10,7 @@
         "motion_speed": "default"
     },
     "generated_at": "2026-10-04T11:35:11+00:00",
-    "updated_at": "2026-10-04T11:35:11+00:00",
+    "updated_at": "2026-10-14T13:52:24+00:00",
     "history": [
         {
             "at": "2026-10-04T11:35:11+00:00",
@@ -23,6 +23,14 @@
                 "motion_speed": "default"
             },
             "source": "seed"
+        },
+        {
+            "at": "2026-10-14T13:52:24+00:00",
+            "kind": "contrast-repair",
+            "changes": [
+                "light --ui-border-strong #859487",
+                "dark --ui-border-strong #566157"
+            ]
         }
     ],
     "tokens": {
@@ -32,7 +40,7 @@
             "--ui-surface-raised": "#ffffff",
             "--ui-surface-sunken": "#e7ede8",
             "--ui-border-subtle": "#d7e1d9",
-            "--ui-border-strong": "#adbcaf",
+            "--ui-border-strong": "#859487",
             "--ui-text-primary": "#161d17",
             "--ui-text-muted": "#5f6560",
             "--ui-accent-brand": "#15803d",
@@ -79,7 +87,7 @@
             "--ui-surface-raised": "#171c18",
             "--ui-surface-sunken": "#020403",
             "--ui-border-subtle": "#242b25",
-            "--ui-border-strong": "#465047",
+            "--ui-border-strong": "#566157",
             "--ui-text-primary": "#eaf0eb",
             "--ui-text-muted": "#8a918b",
             "--ui-accent-brand": "#45a560",
@@ -121,5 +129,5 @@
             "--ui-text-on-info": "#111111"
         }
     },
-    "description": "Forest green \u2014 grounded, sustainable"
+    "description": "Forest green — grounded, sustainable"
 }
