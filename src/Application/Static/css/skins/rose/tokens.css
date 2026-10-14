@@ -23,7 +23,7 @@
     --ui-state-success:       light-dark(#1c882d, #3ca146);
     --ui-state-warning:       light-dark(#e38f00, #f09c17);
     --ui-state-danger:        light-dark(#c53637, #e1514e);
-    --ui-state-info:          light-dark(#007cc7, #0096e2);
+    --ui-state-info:          light-dark(#007bc6, #0096e2);
     --ui-text-on-success:     light-dark(#ffffff, #111111);
     --ui-text-on-warning:     #111111;
     --ui-text-on-danger:      light-dark(#ffffff, #111111);

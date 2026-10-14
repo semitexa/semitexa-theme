@@ -27,6 +27,19 @@ use Semitexa\Theme\Application\Service\Skin\SkinMode;
 trait EnforcesContrast
 {
     /**
+     * A seed this close to grey has no hue: OKLCH still reports one (black,
+     * white and grey all come out at ~89.9, a yellow), and building tinted
+     * neutrals or a boosted accent on it turned a black brand brown.
+     */
+    private const ACHROMATIC_CHROMA = 0.02;
+
+    /** 0 for an achromatic seed (neutrals stay grey), 1 otherwise. */
+    private static function neutralTint(Color $rawSeed): float
+    {
+        return $rawSeed->c < self::ACHROMATIC_CHROMA ? 0.0 : 1.0;
+    }
+
+    /**
      * The contrast the accent must reach against the page.
      *
      * In a dark skin the accent is both link text on a near-black page and the

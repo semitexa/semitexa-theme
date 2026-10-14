@@ -33,6 +33,35 @@ final class ContrastScore
         return ($lighter + 0.05) / ($darker + 0.05);
     }
 
+    /**
+     * APCA lightness contrast (Lc, APCA-W3 0.0.98G-4g) of text on a background:
+     * positive for dark text on light, negative for light on dark. Reported next
+     * to the WCAG 2 ratio, which stays the gate: APCA is not yet a requirement,
+     * but it reads mid-tone pairs (white on a saturated blue) more truthfully.
+     */
+    public static function apcaLc(string $textHex, string $backgroundHex): float
+    {
+        $y = static function (string $hex): float {
+            [$r, $g, $b] = Converter::hexToSrgb($hex);
+            $lum = 0.2126729 * $r ** 2.4 + 0.7151522 * $g ** 2.4 + 0.0721750 * $b ** 2.4;
+
+            return $lum > 0.022 ? $lum : $lum + (0.022 - $lum) ** 1.414;
+        };
+        $text = $y($textHex);
+        $background = $y($backgroundHex);
+        if (abs($background - $text) < 0.0005) {
+            return 0.0;
+        }
+        if ($background > $text) {
+            $sapc = ($background ** 0.56 - $text ** 0.57) * 1.14;
+
+            return $sapc < 0.1 ? 0.0 : ($sapc - 0.027) * 100;
+        }
+        $sapc = ($background ** 0.65 - $text ** 0.62) * 1.14;
+
+        return $sapc > -0.1 ? 0.0 : ($sapc + 0.027) * 100;
+    }
+
     public static function meetsAa(string $hex, string $againstHex = '#ffffff'): bool
     {
         return self::contrast($hex, $againstHex) >= self::AA_NORMAL;

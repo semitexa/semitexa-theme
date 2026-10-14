@@ -46,10 +46,13 @@ final readonly class DualSkinPalette
     }
 
     /**
+     * The tokens with the derived ones filled in, as this palette will emit
+     * them. Public so a check reads what ships, not what the manifest omits.
+     *
      * @param array<string, string> $tokens
      * @return array<string, string>
      */
-    private static function withDerived(array $tokens): array
+    public static function withDerived(array $tokens): array
     {
         foreach (self::DERIVED_ON_STATE as $on => $fill) {
             if (!isset($tokens[$on]) && isset($tokens[$fill])) {

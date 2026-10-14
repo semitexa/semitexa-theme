@@ -61,42 +61,43 @@ final class BalancedAlgorithm implements SkinAlgorithmInterface
     public function generate(SkinParams $params): SkinPalette
     {
         $knobs = KnobResolver::resolve($params->knobs, $this->knobSchema());
-        $seed = $this->normalizeSeed(Converter::hexToOklch($params->seedHex));
+        $raw = Converter::hexToOklch($params->seedHex);
+        $seed = $this->normalizeSeed($raw);
         $hue = $seed->h;
 
-        $tokens = $this->generateColorTokens($seed, $hue, $params->contrastFloor, $params->mode);
+        $tokens = $this->generateColorTokens($seed, $hue, self::neutralTint($raw), $params->contrastFloor, $params->mode);
         $tokens += $this->generateNonColorTokens($knobs, $params->mode);
 
         return new SkinPalette($tokens);
     }
 
     /** @return array<string, string> */
-    private function generateColorTokens(Color $seed, float $hue, float $contrastFloor, SkinMode $mode): array
+    private function generateColorTokens(Color $seed, float $hue, float $tint, float $contrastFloor, SkinMode $mode): array
     {
         $tokens = [];
 
         if ($mode === SkinMode::Dark) {
-            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.14, 0.008, $hue));
-            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.18, 0.010, $hue));
-            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(0.22, 0.012, $hue));
-            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.10, 0.008, $hue));
+            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.14, 0.008 * $tint, $hue));
+            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.18, 0.010 * $tint, $hue));
+            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(0.22, 0.012 * $tint, $hue));
+            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.10, 0.008 * $tint, $hue));
 
-            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.28, 0.015, $hue));
-            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.42, 0.020, $hue));
+            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.28, 0.015 * $tint, $hue));
+            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.42, 0.020 * $tint, $hue));
 
-            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.95, 0.010, $hue));
-            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.65, 0.012, $hue));
+            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.95, 0.010 * $tint, $hue));
+            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.65, 0.012 * $tint, $hue));
         } else {
-            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.985, 0.004, $hue));
-            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.965, 0.008, $hue));
-            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(1.0, 0.0, $hue));
-            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.94, 0.01, $hue));
+            $tokens[TokenContract::SurfacePage->value]   = $this->hex(new Color(0.985, 0.004 * $tint, $hue));
+            $tokens[TokenContract::SurfacePanel->value]  = $this->hex(new Color(0.965, 0.008 * $tint, $hue));
+            $tokens[TokenContract::SurfaceRaised->value] = $this->hex(new Color(1.0, 0.0 * $tint, $hue));
+            $tokens[TokenContract::SurfaceSunken->value] = $this->hex(new Color(0.94, 0.01 * $tint, $hue));
 
-            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.9, 0.015, $hue));
-            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.78, 0.025, $hue));
+            $tokens[TokenContract::BorderSubtle->value] = $this->hex(new Color(0.9, 0.015 * $tint, $hue));
+            $tokens[TokenContract::BorderStrong->value] = $this->hex(new Color(0.78, 0.025 * $tint, $hue));
 
-            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.22, 0.015, $hue));
-            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.5, 0.01, $hue));
+            $tokens[TokenContract::TextPrimary->value] = $this->hex(new Color(0.22, 0.015 * $tint, $hue));
+            $tokens[TokenContract::TextMuted->value]   = $this->hex(new Color(0.5, 0.01 * $tint, $hue));
         }
 
         $surfacePage = $tokens[TokenContract::SurfacePage->value];
