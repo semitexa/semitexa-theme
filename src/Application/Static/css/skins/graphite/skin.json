@@ -10,7 +10,7 @@
         "motion_speed": "default"
     },
     "generated_at": "2026-10-04T11:35:07+00:00",
-    "updated_at": "2026-10-04T11:35:07+00:00",
+    "updated_at": "2026-10-14T13:52:24+00:00",
     "history": [
         {
             "at": "2026-10-04T11:35:07+00:00",
@@ -23,6 +23,14 @@
                 "motion_speed": "default"
             },
             "source": "seed"
+        },
+        {
+            "at": "2026-10-14T13:52:24+00:00",
+            "kind": "contrast-repair",
+            "changes": [
+                "light --ui-border-strong #8e8ea0",
+                "dark --ui-border-strong #5c5d69"
+            ]
         }
     ],
     "tokens": {
@@ -32,7 +40,7 @@
             "--ui-surface-raised": "#ffffff",
             "--ui-surface-sunken": "#eaeaf2",
             "--ui-border-subtle": "#dddde8",
-            "--ui-border-strong": "#b5b5c7",
+            "--ui-border-strong": "#8e8ea0",
             "--ui-text-primary": "#1a1a21",
             "--ui-text-muted": "#626269",
             "--ui-accent-brand": "#3f3f46",
@@ -79,7 +87,7 @@
             "--ui-surface-raised": "#1a1a20",
             "--ui-surface-sunken": "#030305",
             "--ui-border-subtle": "#282830",
-            "--ui-border-strong": "#4c4c58",
+            "--ui-border-strong": "#5c5d69",
             "--ui-text-primary": "#eeeef5",
             "--ui-text-muted": "#8e8e96",
             "--ui-accent-brand": "#94949d",
@@ -121,5 +129,5 @@
             "--ui-text-on-info": "#111111"
         }
     },
-    "description": "Neutral graphite \u2014 monochrome, product-focused"
+    "description": "Neutral graphite — monochrome, product-focused"
 }

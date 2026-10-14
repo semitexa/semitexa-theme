@@ -7,6 +7,7 @@ namespace Semitexa\Theme\Application\Service\Skin\Algorithm;
 use Semitexa\Theme\Domain\Contract\SkinAlgorithmInterface;
 use Semitexa\Theme\Application\Service\Skin\KnobResolver;
 use Semitexa\Theme\Application\Service\Skin\Oklch\Color;
+use Semitexa\Theme\Application\Service\Skin\Oklch\ContrastScore;
 use Semitexa\Theme\Application\Service\Skin\Oklch\Converter;
 use Semitexa\Theme\Application\Service\Skin\SkinMode;
 use Semitexa\Theme\Application\Service\Skin\SkinPalette;
@@ -107,6 +108,14 @@ final class GlassAlgorithm implements SkinAlgorithmInterface
         }
 
         $surfacePage = $tokens[TokenContract::SurfacePage->value];
+        // The strong border is all that outlines an unchecked checkbox, radio or
+        // switch, so WCAG 1.4.11 holds it to 3:1 against the page.
+        $tokens[TokenContract::BorderStrong->value] = $this->hex($this->ensureContrastAgainst(
+            Converter::hexToOklch($tokens[TokenContract::BorderStrong->value]),
+            $surfacePage,
+            ContrastScore::AA_LARGE,
+            $mode,
+        ));
         $accent = $this->ensureContrastAgainst($seed, $surfacePage, $this->accentFloor($contrastFloor, $mode), $mode);
         $accentHex = $this->hex($accent);
         $onAccent = $this->pickOnAccentText($accentHex);
@@ -116,10 +125,10 @@ final class GlassAlgorithm implements SkinAlgorithmInterface
 
         $stateChroma = max(0.10, min(0.15, $seed->c));
         $stateLightBump = $mode === SkinMode::Dark ? 0.08 : 0.0;
-        $tokens[TokenContract::StateSuccess->value] = $this->hex(new Color(0.58 + $stateLightBump, $stateChroma, self::HUE_SUCCESS));
-        $tokens[TokenContract::StateWarning->value] = $this->hex(new Color(0.74 + ($mode === SkinMode::Dark ? 0.04 : 0.0), $stateChroma, self::HUE_WARNING));
-        $tokens[TokenContract::StateDanger->value]  = $this->hex(new Color(0.58 + $stateLightBump, $stateChroma + 0.02, self::HUE_DANGER));
-        $tokens[TokenContract::StateInfo->value]    = $this->hex(new Color(0.60 + $stateLightBump, $stateChroma, self::HUE_INFO));
+        $tokens[TokenContract::StateSuccess->value] = $this->hex($this->ensureReadableFill(new Color(0.58 + $stateLightBump, $stateChroma, self::HUE_SUCCESS)));
+        $tokens[TokenContract::StateWarning->value] = $this->hex($this->ensureReadableFill(new Color(0.74 + ($mode === SkinMode::Dark ? 0.04 : 0.0), $stateChroma, self::HUE_WARNING)));
+        $tokens[TokenContract::StateDanger->value]  = $this->hex($this->ensureReadableFill(new Color(0.58 + $stateLightBump, $stateChroma + 0.02, self::HUE_DANGER)));
+        $tokens[TokenContract::StateInfo->value]    = $this->hex($this->ensureReadableFill(new Color(0.60 + $stateLightBump, $stateChroma, self::HUE_INFO)));
 
         $tokens[TokenContract::FocusRing->value] = $this->hex($accent->scaleChroma(1.2));
 

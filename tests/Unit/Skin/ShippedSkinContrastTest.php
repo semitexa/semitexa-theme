@@ -54,7 +54,7 @@ final class ShippedSkinContrastTest extends TestCase
 
         self::assertSame(4.46, $info['ratio']);
         self::assertFalse($info['pass']);
-        self::assertCount(15, SkinContrastAudit::failures($rows), 'every other gating pair has no tokens and fails');
+        self::assertCount(16, SkinContrastAudit::failures($rows), 'every other gating pair has no tokens and fails');
     }
 
     #[Test]

@@ -10,7 +10,7 @@
         "motion_speed": "default"
     },
     "generated_at": "2026-10-04T11:35:09+00:00",
-    "updated_at": "2026-10-04T11:35:09+00:00",
+    "updated_at": "2026-10-14T13:52:24+00:00",
     "history": [
         {
             "at": "2026-10-04T11:35:09+00:00",
@@ -23,6 +23,14 @@
                 "motion_speed": "default"
             },
             "source": "seed"
+        },
+        {
+            "at": "2026-10-14T13:52:24+00:00",
+            "kind": "contrast-repair",
+            "changes": [
+                "light --ui-border-strong #82929d",
+                "dark --ui-border-strong #546068"
+            ]
         }
     ],
     "tokens": {
@@ -32,7 +40,7 @@
             "--ui-surface-raised": "#ffffff",
             "--ui-surface-sunken": "#e6ecf1",
             "--ui-border-subtle": "#d6dfe7",
-            "--ui-border-strong": "#aabac6",
+            "--ui-border-strong": "#82929d",
             "--ui-text-primary": "#151c21",
             "--ui-text-muted": "#5e6469",
             "--ui-accent-brand": "#0369a1",
@@ -79,7 +87,7 @@
             "--ui-surface-raised": "#161b20",
             "--ui-surface-sunken": "#020405",
             "--ui-border-subtle": "#232a30",
-            "--ui-border-strong": "#444f57",
+            "--ui-border-strong": "#546068",
             "--ui-text-primary": "#e9eff5",
             "--ui-text-muted": "#899096",
             "--ui-accent-brand": "#4497d2",
@@ -121,5 +129,5 @@
             "--ui-text-on-info": "#111111"
         }
     },
-    "description": "Ocean blue \u2014 trustworthy, calm"
+    "description": "Ocean blue — trustworthy, calm"
 }

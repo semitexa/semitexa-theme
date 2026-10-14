@@ -13,11 +13,11 @@ use Semitexa\Theme\Application\Service\Skin\Oklch\Converter;
  *
  * Gating pairs are the ones WCAG requires: body and muted text on every
  * surface, text on the accent and on each state fill (1.4.3, 4.5:1), the
- * accent as link text (4.5:1) and the focus ring against the page (1.4.11,
- * 3:1). Advisory pairs are reported but do not fail a skin: the strong border
- * against the page is under 3:1 in every shipped skin (measured 2026-10-14,
- * 1.8 to 2.7), and darkening it redraws every outline: a design decision,
- * not a fix.
+ * accent as link text (4.5:1), and the focus ring and the strong border
+ * against the page (1.4.11, 3:1). The strong border is the only outline of an
+ * unchecked checkbox, radio or switch; until 2026-10-14 it was advisory, at
+ * 1.8 to 2.7:1 in every shipped skin. Inputs and cards draw the subtle border,
+ * which stays decorative and unmeasured.
  */
 final class SkinContrastAudit
 {
@@ -38,7 +38,7 @@ final class SkinContrastAudit
         ['--ui-text-on-danger', '--ui-state-danger', ContrastScore::AA_NORMAL, true],
         ['--ui-text-on-info', '--ui-state-info', ContrastScore::AA_NORMAL, true],
         ['--ui-focus-ring', '--ui-surface-page', ContrastScore::AA_LARGE, true],
-        ['--ui-border-strong', '--ui-surface-page', ContrastScore::AA_LARGE, false],
+        ['--ui-border-strong', '--ui-surface-page', ContrastScore::AA_LARGE, true],
     ];
 
     /**
