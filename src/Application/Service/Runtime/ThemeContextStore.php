@@ -11,8 +11,8 @@ use Swoole\Coroutine;
 /**
  * Coroutine-safe per-request storage for the active ThemeAssignment.
  *
- * Populated once per request by the LocaleResolved listener (after tenant
- * + locale are known). Read by Twig globals and AssetCollector integration.
+ * Populated once per request by ApplyThemeOnAuthCheckListener, a pipeline
+ * listener on AuthCheck (after tenant, locale and session are known). Read by Twig globals and AssetCollector integration.
  *
  * Mirrors the pattern used by Semitexa\Locale\Context\LocaleContextStore
  * and Semitexa\Ssr\Application\Service\Asset\AssetCollectorStore: Swoole\Coroutine::getContext()
@@ -51,7 +51,7 @@ final class ThemeContextStore
         if ($assignment === null) {
             throw new \RuntimeException(
                 'No ThemeAssignment in context. '
-                . 'The theme resolver must fire on LocaleResolved before templates render.'
+                . 'ApplyThemeOnAuthCheckListener must run on AuthCheck before templates render.'
             );
         }
         return $assignment;
