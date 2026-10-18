@@ -11,8 +11,11 @@ use Swoole\Coroutine;
 /**
  * Coroutine-safe per-request storage for the active ThemeAssignment.
  *
- * Populated once per request by ApplyThemeOnAuthCheckListener, a pipeline
- * listener on AuthCheck (after tenant, locale and session are known). Read by Twig globals and AssetCollector integration.
+ * Stored by ApplyThemeOnAuthCheckListener, a pipeline listener on AuthCheck
+ * (after tenant, locale and session are known), when it resolves the theme.
+ * A resolution that fails is logged by the listener and stores nothing, so
+ * the listener having run does not mean an assignment is here. Read by Twig
+ * globals and AssetCollector integration.
  *
  * Mirrors the pattern used by Semitexa\Locale\Context\LocaleContextStore
  * and Semitexa\Ssr\Application\Service\Asset\AssetCollectorStore: Swoole\Coroutine::getContext()
@@ -41,9 +44,10 @@ final class ThemeContextStore
     }
 
     /**
-     * @throws \RuntimeException when nothing has been stored yet — callers
-     *                           running before the resolver listener fired
-     *                           should use getOrNull() instead.
+     * @throws \RuntimeException when nothing has been stored — callers that
+     *                           can run before the listener stored an
+     *                           assignment, or after it failed to resolve
+     *                           one, should use getOrNull() instead.
      */
     public static function get(): ThemeAssignment
     {
@@ -51,7 +55,8 @@ final class ThemeContextStore
         if ($assignment === null) {
             throw new \RuntimeException(
                 'No ThemeAssignment in context. '
-                . 'ApplyThemeOnAuthCheckListener must run on AuthCheck before templates render.'
+                . 'ApplyThemeOnAuthCheckListener must store a ThemeAssignment on AuthCheck before templates render; '
+                . 'if it ran, check its logs for the resolution error.'
             );
         }
         return $assignment;
