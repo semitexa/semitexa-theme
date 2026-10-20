@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Semitexa\Theme\Application\Service\Runtime;
 
+use Semitexa\Core\Lifecycle\CarriedContext;
 use Semitexa\Core\Lifecycle\PerRequestStateRegistry;
 use Semitexa\Theme\Domain\Model\ThemeAssignment;
 use Swoole\Coroutine;
@@ -35,6 +36,8 @@ final class ThemeContextStore
     public static function set(ThemeAssignment $assignment): void
     {
         if (self::inCoroutine()) {
+            // Work run after the response (an Async handler) renders in the request's theme.
+            CarriedContext::carry(self::KEY);
             Coroutine::getContext()[self::KEY] = $assignment;
             return;
         }
