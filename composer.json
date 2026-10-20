@@ -36,6 +36,11 @@
             "name": "theme-base",
             "description": "Theme resolver + base theme: layouts, partials, default skin, SkinAlgorithmInterface contract",
             "template_alias": "theme-base"
+        },
+        "semitexa": {
+            "floors": {
+                "semitexa/core": "next"
+            }
         }
     }
 }
