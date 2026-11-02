@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     {#- The page's own title, or nothing: 'Semitexa' is the tab's fallback, not a name for the page's JSON-LD. -#}
-    {%- set page_title -%}{% block title %}{{ title|default('') }}{% endblock %}{%- endset %}
-    <title>{{ page_title|trim is not empty ? page_title : 'Semitexa' }}</title>
+    {%- set __layout_title -%}{% block title %}{{ title|default('') }}{% endblock %}{%- endset %}
+    <title>{{ __layout_title|trim is not empty ? __layout_title : 'Semitexa' }}</title>
     <style>
       .layout{display:grid;grid-template-columns:minmax(220px,280px) minmax(0,1fr) minmax(220px,280px);gap:24px}
       @media (max-width: 900px){.layout{grid-template-columns:1fr}}
     </style>
-    {{ semantic_head(page_title|trim) }}
+    {{ semantic_head(__layout_title|trim) }}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}
