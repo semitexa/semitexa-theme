@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>{% block title %}{{ title|default('Semitexa') }}{% endblock %}</title>
-    {{ semantic_head() }}
+    {{ semantic_head(block('title')) }}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}

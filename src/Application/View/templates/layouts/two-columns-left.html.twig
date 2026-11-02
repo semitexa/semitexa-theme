@@ -6,7 +6,7 @@
     <style>
       .layout{display:grid;grid-template-columns:280px 1fr;gap:24px}
     </style>
-    {{ semantic_head() }}
+    {{ semantic_head(block('title')) }}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}

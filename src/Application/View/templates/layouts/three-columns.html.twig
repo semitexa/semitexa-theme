@@ -7,7 +7,7 @@
       .layout{display:grid;grid-template-columns:minmax(220px,280px) minmax(0,1fr) minmax(220px,280px);gap:24px}
       @media (max-width: 900px){.layout{grid-template-columns:1fr}}
     </style>
-    {{ semantic_head() }}
+    {{ semantic_head(block('title')) }}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}
