@@ -2,8 +2,10 @@
 <html lang="{{ app.request.locale ?? app.request.defaultLocale ?? 'en' }}">
   <head>
     <meta charset="utf-8" />
-    <title>{% block title %}{{ title|default('Semitexa') }}{% endblock %}</title>
-    {{ semantic_head() }}
+    {#- The page's own title, or nothing: 'Semitexa' is the tab's fallback, not a name for the page's JSON-LD. -#}
+    {%- set __layout_title -%}{% block title %}{{ title|default('') }}{% endblock %}{%- endset %}
+    <title>{{ __layout_title|trim is not empty ? __layout_title : 'Semitexa' }}</title>
+    {{ semantic_head(__layout_title|trim) }}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}
