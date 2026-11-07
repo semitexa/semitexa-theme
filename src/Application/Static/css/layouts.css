@@ -5,19 +5,18 @@
  * dark text-on-dark pair made a page unreadable. Not layered: a project's CSS
  * comes after this and wins on order.
  */
-body {
+/* :where() keeps these at no specificity: a page's own rule wins by order alone. */
+:where(body) {
     margin: 0;
     background: var(--ui-surface-page);
     color: var(--ui-text-primary);
 }
 
-body > header:empty,
-body > footer:empty,
-body > nav:empty {
+:where(body > header, body > footer, body > nav):not(:has(*)) {
     display: none;
 }
 
-main {
+:where(main) {
     box-sizing: border-box;
     width: 100%;
     max-width: 48rem;
@@ -25,11 +24,11 @@ main {
     padding: 2rem 1.25rem;
 }
 
-main > * + * {
+:where(main > * + *) {
     margin-block-start: 1.5rem;
 }
 
-.layout {
+:where(.layout) {
     box-sizing: border-box;
     display: grid;
     gap: 2rem;
@@ -39,21 +38,24 @@ main > * + * {
     grid-template-columns: minmax(0, 1fr);
 }
 
-.layout > main {
+:where(.layout > main) {
     max-width: none;
     padding: 0;
 }
 
 @media (min-width: 48rem) {
-    .layout:has(> aside + main) {
+    :where(.layout:has(> aside + main):not(:has(> main + aside))) {
         grid-template-columns: 16rem minmax(0, 1fr);
     }
 
-    .layout:has(> main + aside) {
+    :where(.layout:has(> main + aside):not(:has(> aside + main))) {
         grid-template-columns: minmax(0, 1fr) 16rem;
     }
+}
 
-    .layout:has(> aside + main + aside) {
+/* Three columns want more room: one column below this, as the layout's own breakpoint. */
+@media (min-width: 56.25rem) {
+    :where(.layout:has(> aside + main + aside)) {
         grid-template-columns: 14rem minmax(0, 1fr) 14rem;
     }
 }
