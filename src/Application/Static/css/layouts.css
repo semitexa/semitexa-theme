@@ -1,13 +1,14 @@
 /*
  * What the base layouts need to read as a page: a width, a margin, and columns
- * that are columns. Spacing comes from the skin's tokens with a fallback, so a
- * project's own skin carries through. Not layered: a project's CSS comes after
- * this and wins on order.
+ * that are columns. Colours are the skin's tokens with no fallback: a fallback of
+ * one fixed colour is right in one colour scheme only, and white under a skin's
+ * dark text-on-dark pair made a page unreadable. Not layered: a project's CSS
+ * comes after this and wins on order.
  */
 body {
     margin: 0;
-    background: var(--ui-color-bg, #fff);
-    color: var(--ui-color-text, inherit);
+    background: var(--ui-surface-page);
+    color: var(--ui-text-primary);
 }
 
 body > header:empty,

@@ -42,6 +42,21 @@ final class BaseLayoutHeadTest extends TestCase
         self::assertStringContainsString("asset('css/layouts.css', 'theme-base')", $twig);
     }
 
+    /**
+     * A token that does not exist falls to its fallback silently: a mistyped
+     * background stayed white while the skin's text turned light in dark mode.
+     */
+    public function test_every_token_the_layout_css_uses_is_in_the_default_skin(): void
+    {
+        $css = (string) file_get_contents(__DIR__ . '/../../../src/Application/Static/css/layouts.css');
+        $skin = (string) file_get_contents(__DIR__ . '/../../../src/Application/Static/css/skins/default/tokens.css');
+
+        self::assertSame(2, preg_match_all('/var\((--[a-z0-9-]+)/', $css, $used));
+        foreach ($used[1] as $token) {
+            self::assertStringContainsString($token . ':', $skin);
+        }
+    }
+
     public function test_the_layout_css_is_published(): void
     {
         $manifest = json_decode((string) file_get_contents(__DIR__ . '/../../../src/Application/Static/assets.json'), true);
