@@ -10,6 +10,7 @@
       @media (max-width: 900px){.layout{grid-template-columns:1fr}}
     </style>
     {{ semantic_head(__layout_title|trim) }}
+    {% include '@project-layouts-theme-base/partials/head/base-head.html.twig' %}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}

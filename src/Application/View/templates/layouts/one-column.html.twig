@@ -6,6 +6,7 @@
     {%- set __layout_title -%}{% block title %}{{ title|default('') }}{% endblock %}{%- endset %}
     <title>{{ __layout_title|trim is not empty ? __layout_title : 'Semitexa' }}</title>
     {{ semantic_head(__layout_title|trim) }}
+    {% include '@project-layouts-theme-base/partials/head/base-head.html.twig' %}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}
