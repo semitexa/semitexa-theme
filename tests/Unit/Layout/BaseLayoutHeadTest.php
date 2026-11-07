@@ -34,6 +34,14 @@ final class BaseLayoutHeadTest extends TestCase
         self::assertLessThan(strpos($twig, 'asset_head()'), $head, 'what a page adds comes later and wins');
     }
 
+    #[DataProvider('layouts')]
+    public function test_a_base_layout_leaves_its_grid_to_layouts_css(string $layout): void
+    {
+        // layouts.css sits in :where(), at no specificity: an inline .layout rule here beat it
+        // at every width, and a phone got a 280px sidebar beside a 70px page.
+        self::assertStringNotContainsString('<style', (string) file_get_contents(self::TEMPLATES . "/layouts/{$layout}.html.twig"));
+    }
+
     public function test_the_head_links_the_skin_and_the_layout_css(): void
     {
         $twig = (string) file_get_contents(self::TEMPLATES . '/partials/head/base-head.html.twig');

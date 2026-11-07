@@ -5,9 +5,6 @@
     {#- The page's own title, or nothing: 'Semitexa' is the tab's fallback, not a name for the page's JSON-LD. -#}
     {%- set __layout_title -%}{% block title %}{{ title|default('') }}{% endblock %}{%- endset %}
     <title>{{ __layout_title|trim is not empty ? __layout_title : 'Semitexa' }}</title>
-    <style>
-      .layout{display:grid;grid-template-columns:1fr 280px;gap:24px}
-    </style>
     {{ semantic_head(__layout_title|trim) }}
     {% include '@project-layouts-theme-base/partials/head/base-head.html.twig' %}
     {{ asset_head() }}

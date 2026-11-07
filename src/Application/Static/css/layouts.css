@@ -45,17 +45,18 @@
 
 @media (min-width: 48rem) {
     :where(.layout:has(> aside + main):not(:has(> main + aside))) {
-        grid-template-columns: 16rem minmax(0, 1fr);
+        grid-template-columns: 17.5rem minmax(0, 1fr);
     }
 
     :where(.layout:has(> main + aside):not(:has(> aside + main))) {
-        grid-template-columns: minmax(0, 1fr) 16rem;
+        grid-template-columns: minmax(0, 1fr) 17.5rem;
     }
 }
 
-/* Three columns want more room: one column below this, as the layout's own breakpoint. */
+/* Three columns want more room: one column below 900px. The grid lives here only; a
+   layout template's own <style> would outrank these zero-specificity rules. */
 @media (min-width: 56.25rem) {
     :where(.layout:has(> aside + main + aside)) {
-        grid-template-columns: 14rem minmax(0, 1fr) 14rem;
+        grid-template-columns: minmax(13.75rem, 17.5rem) minmax(0, 1fr) minmax(13.75rem, 17.5rem);
     }
 }
