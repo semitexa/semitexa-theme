@@ -5,20 +5,18 @@
     {#- The page's own title, or nothing: 'Semitexa' is the tab's fallback, not a name for the page's JSON-LD. -#}
     {%- set __layout_title -%}{% block title %}{{ title|default('') }}{% endblock %}{%- endset %}
     <title>{{ __layout_title|trim is not empty ? __layout_title : 'Semitexa' }}</title>
-    <style>
-      .layout{display:grid;grid-template-columns:280px 1fr;gap:24px}
-    </style>
     {{ semantic_head(__layout_title|trim) }}
+    {% include '@project-layouts-theme-base/partials/head/base-head.html.twig' %}
     {{ asset_head() }}
     {{ inject_scripts('head') }}
     {% block head_extra %}{{ layout_slot('head_extra') }}{% endblock %}
   </head>
   <body{{ __ssr_handle_attr|default('')|raw }}>
     <header>
-      {% block header %}{{ layout_slot('header') }}{{ header|default('')|raw }}{% endblock %}
+      {%- block header %}{{ layout_slot('header') }}{{ header|default('')|raw }}{% endblock -%}
     </header>
     <nav class="breadcrumbs" aria-label="Breadcrumbs">
-      {% block breadcrumbs %}{{ layout_slot('breadcrumbs') }}{{ breadcrumbs|default('')|raw }}{% endblock %}
+      {%- block breadcrumbs %}{{ layout_slot('breadcrumbs') }}{{ breadcrumbs|default('')|raw }}{% endblock -%}
     </nav>
     <div class="layout">
       <aside>
@@ -29,7 +27,7 @@
       </main>
     </div>
     <footer>
-      {% block footer %}{{ layout_slot('footer') }}{{ footer|default('')|raw }}{{ layout_slot('footer_after') }}{% endblock %}
+      {%- block footer %}{{ layout_slot('footer') }}{{ footer|default('')|raw }}{{ layout_slot('footer_after') }}{% endblock -%}
     </footer>
     {{ asset_body() }}
     {{ inject_scripts('body') }}

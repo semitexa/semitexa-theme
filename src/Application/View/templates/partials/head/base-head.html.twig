@@ -1,0 +1,8 @@
+{#- What a page on a base layout needs to look like one: the skin's tokens, without which every
+    control is unstyled, and the layout's own width and margins. Before asset_head(), so that what
+    a page and its modules add comes later and wins. -#}
+{%- set __skin_css = theme_skin_css() -%}
+{%- if __skin_css is not empty %}
+    <link rel="stylesheet" href="{{ __skin_css }}">
+{%- endif %}
+    <link rel="stylesheet" href="{{ asset('css/layouts.css', 'theme-base') }}">

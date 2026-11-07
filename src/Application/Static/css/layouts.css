@@ -1,0 +1,63 @@
+/*
+ * What the base layouts need to read as a page: a width, a margin, and columns
+ * that are columns. Colours are the skin's tokens with no fallback: a fallback of
+ * one fixed colour is right in one colour scheme only, and white under a skin's
+ * dark text-on-dark pair made a page unreadable. Not layered: a project's CSS
+ * comes after this and wins on order.
+ */
+/* :where() keeps these at no specificity: a page's own rule wins by order alone. */
+:where(body) {
+    margin: 0;
+    background: var(--ui-surface-page);
+    color: var(--ui-text-primary);
+}
+
+/* The layouts trim the whitespace around an empty bar, so :empty sees it; a bar with only text stays. */
+:where(body > header, body > footer, body > nav):empty {
+    display: none;
+}
+
+:where(main) {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+    padding: 2rem 1.25rem;
+}
+
+:where(main > * + *) {
+    margin-block-start: 1.5rem;
+}
+
+:where(.layout) {
+    box-sizing: border-box;
+    display: grid;
+    gap: 2rem;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 2rem 1.25rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+:where(.layout > main) {
+    max-width: none;
+    padding: 0;
+}
+
+@media (min-width: 48rem) {
+    :where(.layout:has(> aside + main):not(:has(> main + aside))) {
+        grid-template-columns: 17.5rem minmax(0, 1fr);
+    }
+
+    :where(.layout:has(> main + aside):not(:has(> aside + main))) {
+        grid-template-columns: minmax(0, 1fr) 17.5rem;
+    }
+}
+
+/* Three columns want more room: one column below 900px. The grid lives here only; a
+   layout template's own <style> would outrank these zero-specificity rules. */
+@media (min-width: 56.25rem) {
+    :where(.layout:has(> aside + main + aside)) {
+        grid-template-columns: minmax(13.75rem, 17.5rem) minmax(0, 1fr) minmax(13.75rem, 17.5rem);
+    }
+}
