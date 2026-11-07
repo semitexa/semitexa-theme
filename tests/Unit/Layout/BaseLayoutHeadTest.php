@@ -42,6 +42,19 @@ final class BaseLayoutHeadTest extends TestCase
         self::assertStringNotContainsString('<style', (string) file_get_contents(self::TEMPLATES . "/layouts/{$layout}.html.twig"));
     }
 
+    #[DataProvider('layouts')]
+    public function test_an_empty_bar_renders_empty_and_a_text_one_stays(string $layout): void
+    {
+        // layouts.css hides a bar with :empty: only a bar with nothing in it, not one with text alone.
+        $twig = (string) file_get_contents(self::TEMPLATES . "/layouts/{$layout}.html.twig");
+        foreach (['header', 'breadcrumbs', 'footer'] as $block) {
+            self::assertMatchesRegularExpression('/\{%- block ' . $block . ' %\}.*?\{% endblock -%\}/s', $twig, "{$block}: whitespace around an empty bar is trimmed");
+        }
+        $css = (string) file_get_contents(self::TEMPLATES . '/../../Static/css/layouts.css');
+        self::assertStringContainsString(':where(body > header, body > footer, body > nav):empty', $css);
+        self::assertStringNotContainsString(':not(:has(*))', $css);
+    }
+
     public function test_the_head_links_the_skin_and_the_layout_css(): void
     {
         $twig = (string) file_get_contents(self::TEMPLATES . '/partials/head/base-head.html.twig');

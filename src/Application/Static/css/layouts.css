@@ -12,7 +12,8 @@
     color: var(--ui-text-primary);
 }
 
-:where(body > header, body > footer, body > nav):not(:has(*)) {
+/* The layouts trim the whitespace around an empty bar, so :empty sees it; a bar with only text stays. */
+:where(body > header, body > footer, body > nav):empty {
     display: none;
 }
 
